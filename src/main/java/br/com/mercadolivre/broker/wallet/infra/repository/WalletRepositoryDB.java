@@ -20,11 +20,13 @@ public class WalletRepositoryDB implements WalletRepository {
     }
 
     @Override
-    public void create(Wallet wallet) throws WalletNotCreatedException {
+    public String create(Wallet wallet) throws WalletNotCreatedException {
         try {
-            repository.save(new WalletEntity(wallet.getCode()));
+            WalletEntity savedWallet =
+                repository.save(new WalletEntity(wallet.getCode()));
+            return savedWallet.getCode();
         } catch (Exception e) {
-            //TODO: handle exception
+            throw new WalletNotCreatedException(e.getMessage());
         }
     }
 

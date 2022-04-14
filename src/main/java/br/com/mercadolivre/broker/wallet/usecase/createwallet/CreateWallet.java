@@ -15,11 +15,11 @@ public class CreateWallet {
     public CreateWalletOutput execute() {
         Wallet wallet = new Wallet(this.repository.generateCode());
         try {
-            repository.create(wallet);
-            return new CreateWalletOutput().withSucess();
+            String code = repository.create(wallet);
+            return new CreateWalletOutput().withCode(code);
         } catch (WalletNotCreatedException e) {
             return new CreateWalletOutput().withError(e.getMessage());
         }
     }
-    
+
 }

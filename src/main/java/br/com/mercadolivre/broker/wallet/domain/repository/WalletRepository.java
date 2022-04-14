@@ -6,6 +6,6 @@ import br.com.mercadolivre.broker.wallet.domain.exception.WalletNotCreatedExcept
 public interface WalletRepository{
 
     String generateCode();
-    void create(Wallet wallet) throws WalletNotCreatedException;
-    
+    String create(Wallet wallet) throws WalletNotCreatedException;
+
 }
