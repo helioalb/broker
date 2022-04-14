@@ -1,4 +1,4 @@
-package br.com.mercadolivre.broker.wallet.domain.infa.repository.jpa;
+package br.com.mercadolivre.broker.wallet.infra.repository.jpa;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

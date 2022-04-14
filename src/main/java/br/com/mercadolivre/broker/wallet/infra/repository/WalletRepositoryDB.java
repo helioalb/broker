@@ -1,4 +1,4 @@
-package br.com.mercadolivre.broker.wallet.domain.infa.repository;
+package br.com.mercadolivre.broker.wallet.infra.repository;
 
 import java.util.UUID;
 
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
 import br.com.mercadolivre.broker.wallet.domain.exception.WalletNotCreatedException;
-import br.com.mercadolivre.broker.wallet.domain.infa.repository.jpa.WalletEntity;
-import br.com.mercadolivre.broker.wallet.domain.infa.repository.jpa.WalletRepositoryJpa;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
+import br.com.mercadolivre.broker.wallet.infra.repository.jpa.WalletEntity;
+import br.com.mercadolivre.broker.wallet.infra.repository.jpa.WalletRepositoryJpa;
 
 public class WalletRepositoryDB implements WalletRepository {
     @Autowired
@@ -27,5 +27,5 @@ public class WalletRepositoryDB implements WalletRepository {
             //TODO: handle exception
         }
     }
-    
+
 }
