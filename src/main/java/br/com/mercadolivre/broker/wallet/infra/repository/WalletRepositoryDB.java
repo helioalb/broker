@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import br.com.mercadolivre.broker.wallet.domain.entity.Partition;
 import br.com.mercadolivre.broker.wallet.domain.entity.Transaction;
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
+import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
 import br.com.mercadolivre.broker.wallet.domain.exception.PendingTransactionsNotPersistedException;
 import br.com.mercadolivre.broker.wallet.domain.exception.WalletNotCreatedException;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
@@ -53,37 +54,61 @@ public class WalletRepositoryDB implements WalletRepository {
     @Override
     public void persistPendingTransactions(Wallet wallet) throws PendingTransactionsNotPersistedException {
         try {
-            WalletEntity walletEntity = walletDAO.getByCode(wallet.getCode());
-            if (walletEntity == null) throw new PendingTransactionsNotPersistedException("wallet not exist");
-            for (Partition partition : wallet.getPartitions()) {
-                if (partition.hasPendingTransactions()) {
-                    PartitionEntity partitionEntity = partitionDAO.getByWalletIdAndAsset(walletEntity.getId(), partition.getAsset());
-                    if (partitionEntity == null) {
-                        partitionEntity = new PartitionEntity(partition.getAsset(), walletEntity);
-                        partitionDAO.save(partitionEntity);
-                    }
-
-                    for (Transaction transaction : partition.pendingTransactions()) {
-                        BigDecimal currentBalance = transactionDAO.balanceOfPartition(partitionEntity.getId());
-                        BigDecimal signedAmount = transaction.getType().isIncome() ? transaction.getAmount() : transaction.getAmount().negate();
-
-                        if (currentBalance == null) {
-                            if (signedAmount.compareTo(BigDecimal.ZERO) < 0) {
-                                throw new PendingTransactionsNotPersistedException("insufficient balance");
-                            }
-                        } else {
-                            if (signedAmount.add(currentBalance).compareTo(BigDecimal.ZERO) < 0) {
-                                throw new PendingTransactionsNotPersistedException("insufficient balance");
-                            }
-                        }
-
-                        TransactionVO transactionVO = new TransactionVO(transaction.getType(), signedAmount, partitionEntity);
-                        transactionDAO.save(transactionVO);
-                    }
-                }
-            }
+            persistPendingTransactionOnWallet(wallet);
         } catch (Exception e) {
             throw new PendingTransactionsNotPersistedException(e.getMessage());
+        }
+    }
+
+    private void persistPendingTransactionOnWallet(Wallet wallet) {
+        WalletEntity walletEntity = walletDAO.getByCode(wallet.getCode());
+        if (walletEntity == null) throw new PendingTransactionsNotPersistedException("wallet not exist");
+        for (Partition partition : wallet.getPartitions()) {
+            if (partition.hasPendingTransactions()) {
+                persistPendingTransactions(walletEntity, partition);
+            }
+        }
+    }
+
+    private void persistPendingTransactions(WalletEntity walletEntity,
+                                            Partition partition) {
+        PartitionEntity partitionEntity = findOrCreatePartitionEntity(partition,
+                                                                      walletEntity);
+        for (Transaction transaction : partition.pendingTransactions()) {
+            TransactionType type = transaction.getType();
+            BigDecimal amount = transaction.getAmount();
+            BigDecimal signedAmount = type.isIncome() ? amount : amount.negate();
+            ensureNonNegativeBalance(partitionEntity, signedAmount);
+            TransactionVO transactionVO = new TransactionVO(type, signedAmount,
+                                                            partitionEntity);
+            transactionDAO.save(transactionVO);
+        }
+    }
+
+    private PartitionEntity findOrCreatePartitionEntity(Partition partition,
+                                                        WalletEntity walletEntity) {
+        PartitionEntity partitionEntity =
+            partitionDAO.getByWalletIdAndAsset(walletEntity.getId(),
+                                               partition.getAsset());
+        if (partitionEntity == null) {
+            partitionEntity = new PartitionEntity(partition.getAsset(),
+                                                  walletEntity);
+            partitionDAO.save(partitionEntity);
+        }
+        return partitionEntity;
+    }
+
+    private void ensureNonNegativeBalance(PartitionEntity partitionEntity, BigDecimal signedAmount) {
+        BigDecimal currentBalance =
+            transactionDAO.balanceOfPartition(partitionEntity.getId());
+        if (currentBalance == null) {
+            if (signedAmount.compareTo(BigDecimal.ZERO) < 0) {
+                throw new PendingTransactionsNotPersistedException("insufficient balance");
+            }
+        } else {
+            if (signedAmount.add(currentBalance).compareTo(BigDecimal.ZERO) < 0) {
+                throw new PendingTransactionsNotPersistedException("insufficient balance");
+            }
         }
     }
 
