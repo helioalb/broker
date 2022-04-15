@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import br.com.mercadolivre.broker.wallet.domain.entity.Transaction;
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -6,8 +6,7 @@ import br.com.mercadolivre.broker.wallet.domain.exception.WalletNotCreatedExcept
 
 public interface WalletRepository{
 
-    String generateCode();
-    String create(Wallet wallet) throws WalletNotCreatedException;
+    String create() throws WalletNotCreatedException;
     Wallet findByCode(String code);
     void persistPendingTransactions(Wallet wallet) throws PendingTransactionsNotPersistedException;
 

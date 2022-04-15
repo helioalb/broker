@@ -23,19 +23,16 @@ public class WalletRepositoryDB implements WalletRepository {
     private TransactionDAO transactionDAO;
 
     @Override
-    public String generateCode() {
-        return UUID.randomUUID().toString();
-    }
-
-    @Override
-    public String create(Wallet wallet) throws WalletNotCreatedException {
+    public String create() throws WalletNotCreatedException {
         try {
-            WalletEntity savedWallet =
-                walletDAO.save(new WalletEntity(wallet.getCode()));
-            return savedWallet.getCode();
+            return walletDAO.save(new WalletEntity(generateCode())).getCode();
         } catch (Exception e) {
             throw new WalletNotCreatedException(e.getMessage());
         }
+    }
+
+    private String generateCode() {
+        return UUID.randomUUID().toString();
     }
 
     @Override

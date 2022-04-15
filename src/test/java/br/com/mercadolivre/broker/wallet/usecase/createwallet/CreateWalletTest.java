@@ -2,13 +2,11 @@ package br.com.mercadolivre.broker.wallet.usecase.createwallet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 
-import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 
 public class CreateWalletTest {
@@ -16,8 +14,7 @@ public class CreateWalletTest {
     void createWalletSuccess() {
         WalletRepository repository = mock(WalletRepository.class);
         String code = "93d1ab2f-968d-4d7f-8050-b92b22c11e64";
-        when(repository.generateCode()).thenReturn(code);
-        when(repository.create(any(Wallet.class))).thenReturn(code);
+        when(repository.create()).thenReturn(code);
 
         CreateWalletOutput output = new CreateWallet(repository).execute();
 
