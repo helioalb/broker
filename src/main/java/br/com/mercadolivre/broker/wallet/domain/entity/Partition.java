@@ -26,6 +26,8 @@ public class Partition {
     }
 
     private void setBalance(BigDecimal balance) {
+        balance = (balance != null) ? balance : BigDecimal.ZERO;
+
         if (balance.compareTo(BigDecimal.ZERO) < 0)
             throw new IllegalArgumentException("Negative balance");
         this.balance = balance;
@@ -56,6 +58,10 @@ public class Partition {
 
     public List<Transaction> pendingTransactions() {
         return Collections.unmodifiableList(this.transactions);
+    }
+
+    public boolean hasPendingTransactions() {
+        return this.transactions != null && !this.transactions.isEmpty();
     }
 
     public Asset getAsset() {

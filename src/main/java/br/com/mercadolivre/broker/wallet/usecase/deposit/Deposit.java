@@ -1,7 +1,6 @@
 package br.com.mercadolivre.broker.wallet.usecase.deposit;
 
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
-import br.com.mercadolivre.broker.wallet.domain.exception.PendingTransactionsNotPersistedException;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 
 public class Deposit {
@@ -20,7 +19,7 @@ public class Deposit {
             wallet.deposit(input.getAsset(), input.getAmount());
             repository.persistPendingTransactions(wallet);
             return new DepositOutput().withSuccess();
-        } catch (PendingTransactionsNotPersistedException e) {
+        } catch (Exception e) {
             return new DepositOutput().withError(e.getMessage());
         }
     }

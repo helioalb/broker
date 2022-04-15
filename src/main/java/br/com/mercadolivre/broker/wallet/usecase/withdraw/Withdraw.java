@@ -15,6 +15,7 @@ public class Withdraw {
         Wallet wallet = repository.findByCode(input.getCode());
         try {
             wallet.withdraw(input.getAsset(), input.getAmount());
+            this.repository.persistPendingTransactions(wallet);
             return new WithdrawOutput().withSuccess();
         } catch (Exception e) {
             return new WithdrawOutput().withError(e.getMessage());

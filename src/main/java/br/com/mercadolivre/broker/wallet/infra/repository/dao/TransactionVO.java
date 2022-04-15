@@ -1,4 +1,4 @@
-package br.com.mercadolivre.broker.wallet.infra.repository.jpa;
+package br.com.mercadolivre.broker.wallet.infra.repository.dao;
 
 import java.math.BigDecimal;
 
