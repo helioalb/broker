@@ -7,6 +7,7 @@ import java.util.Set;
 
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
+import br.com.mercadolivre.broker.wallet.domain.exception.WithdrawNotRealizedException;
 
 public class Wallet {
 
@@ -38,6 +39,14 @@ public class Wallet {
     public void deposit(Asset asset, BigDecimal amount) {
         Partition partition = findPartitionByAsset(asset);
         partition.addTransaction(TransactionType.DEPOSIT, amount);
+    }
+
+    public void withdraw(Asset asset, BigDecimal amount)
+        throws WithdrawNotRealizedException {
+        Partition partition = findPartitionByAsset(asset);
+        if (!partition.canWithdraw(amount))
+            throw new WithdrawNotRealizedException("insufficient balance");
+        partition.addTransaction(TransactionType.WITHDRAW, amount);
     }
 
     private Partition findPartitionByAsset(Asset asset) {

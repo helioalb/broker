@@ -12,9 +12,22 @@ public class Partition {
 
     private Asset asset;
     private List<Transaction> transactions;
+    private BigDecimal balance;
 
     public Partition(Asset asset) {
         this.asset = asset;
+        setBalance(BigDecimal.ZERO);
+    }
+
+    public Partition(Asset asset, BigDecimal balance) {
+        this.asset = asset;
+        setBalance(balance);
+    }
+
+    private void setBalance(BigDecimal balance) {
+        if (balance.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("Negative balance");
+        this.balance = balance;
     }
 
     public void addTransaction(TransactionType type, BigDecimal amount) {
@@ -35,5 +48,9 @@ public class Partition {
 
     public Asset getAsset() {
         return this.asset;
+    }
+
+    public boolean canWithdraw(BigDecimal amount) {
+        return amount.compareTo(this.balance) <= 0;
     }
 }

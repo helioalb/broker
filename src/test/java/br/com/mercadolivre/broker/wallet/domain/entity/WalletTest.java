@@ -1,5 +1,6 @@
 package br.com.mercadolivre.broker.wallet.domain.entity;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -10,6 +11,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
+import br.com.mercadolivre.broker.wallet.domain.exception.WithdrawNotRealizedException;
 
 public class WalletTest {
     @Test
@@ -28,5 +30,30 @@ public class WalletTest {
         Wallet wallet = new Wallet(code, partitions);
         wallet.deposit(Asset.BRL, new BigDecimal("123.456"));
         assertEquals(1, wallet.numberOfManagedAssets());
+    }
+
+    @Test
+    void witdrawSucces() {
+        String code = "93d1ab2f-968d-4d7f-8050-b92b22c11e64";
+        Set<Partition> partitions = new HashSet<>();
+        partitions.add(new Partition(Asset.BRL, new BigDecimal("2")));
+        Wallet wallet = new Wallet(code, partitions);
+        assertDoesNotThrow(
+            () -> wallet.withdraw(Asset.BRL, new BigDecimal("1"))
+        );
+    }
+
+    @Test
+    void witdrawWithException() {
+        String code = "93d1ab2f-968d-4d7f-8050-b92b22c11e64";
+        Set<Partition> partitions = new HashSet<>();
+        partitions.add(new Partition(Asset.BRL, new BigDecimal("2")));
+        Wallet wallet = new Wallet(code, partitions);
+        BigDecimal amount = new BigDecimal("3");
+
+        Exception e = assertThrows(WithdrawNotRealizedException.class,
+            () -> wallet.withdraw(Asset.BRL, amount));
+
+        assertEquals("insufficient balance", e.getMessage());
     }
 }
