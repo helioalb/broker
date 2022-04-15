@@ -11,7 +11,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
-import br.com.mercadolivre.broker.wallet.domain.exception.WithdrawNotRealizedException;
+import br.com.mercadolivre.broker.wallet.domain.exception.WithdrawException;
 
 public class WalletTest {
     @Test
@@ -62,7 +62,7 @@ public class WalletTest {
         Wallet wallet = new Wallet(code, partitions);
         BigDecimal amount = new BigDecimal("3");
 
-        Exception e = assertThrows(WithdrawNotRealizedException.class,
+        Exception e = assertThrows(WithdrawException.class,
             () -> wallet.withdraw(Asset.BRL, amount));
 
         assertEquals("insufficient balance", e.getMessage());

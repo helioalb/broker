@@ -7,7 +7,7 @@ import java.util.List;
 
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
-import br.com.mercadolivre.broker.wallet.domain.exception.TransactionNotPermitedException;
+import br.com.mercadolivre.broker.wallet.domain.exception.TransactionException;
 
 public class Partition {
 
@@ -41,7 +41,7 @@ public class Partition {
         BigDecimal newBalance = calculateNewBalance(type, amount);
 
         if (newBalance.compareTo(BigDecimal.ZERO) < 0)
-            throw new TransactionNotPermitedException("insufficient balance");
+            throw new TransactionException("insufficient balance");
         this.transactions.add(transaction);
         this.balance = newBalance;
     }

@@ -7,8 +7,8 @@ import java.util.Set;
 
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
-import br.com.mercadolivre.broker.wallet.domain.exception.TransactionNotPermitedException;
-import br.com.mercadolivre.broker.wallet.domain.exception.WithdrawNotRealizedException;
+import br.com.mercadolivre.broker.wallet.domain.exception.TransactionException;
+import br.com.mercadolivre.broker.wallet.domain.exception.WithdrawException;
 
 public class Wallet {
 
@@ -43,12 +43,12 @@ public class Wallet {
     }
 
     public void withdraw(Asset asset, BigDecimal amount)
-        throws WithdrawNotRealizedException {
+        throws WithdrawException {
         Partition partition = findPartitionByAsset(asset);
         try {
             partition.addTransaction(TransactionType.WITHDRAW, amount);
-        } catch(TransactionNotPermitedException e) {
-            throw new WithdrawNotRealizedException(e.getMessage());
+        } catch(TransactionException e) {
+            throw new WithdrawException(e.getMessage());
         }
     }
 

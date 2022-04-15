@@ -12,7 +12,7 @@ import br.com.mercadolivre.broker.wallet.domain.entity.Partition;
 import br.com.mercadolivre.broker.wallet.domain.entity.Transaction;
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
-import br.com.mercadolivre.broker.wallet.domain.exception.PendingTransactionsNotPersistedException;
+import br.com.mercadolivre.broker.wallet.domain.exception.PendingTransactionsException;
 import br.com.mercadolivre.broker.wallet.domain.exception.WalletNotCreatedException;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 import br.com.mercadolivre.broker.wallet.infra.repository.dao.PartitionDAO;
@@ -52,17 +52,17 @@ public class WalletRepositoryDB implements WalletRepository {
     }
 
     @Override
-    public void persistPendingTransactions(Wallet wallet) throws PendingTransactionsNotPersistedException {
+    public void persistPendingTransactions(Wallet wallet) throws PendingTransactionsException {
         try {
             persistPendingTransactionOnWallet(wallet);
         } catch (Exception e) {
-            throw new PendingTransactionsNotPersistedException(e.getMessage());
+            throw new PendingTransactionsException(e.getMessage());
         }
     }
 
     private void persistPendingTransactionOnWallet(Wallet wallet) {
         WalletEntity walletEntity = walletDAO.getByCode(wallet.getCode());
-        if (walletEntity == null) throw new PendingTransactionsNotPersistedException("wallet not exist");
+        if (walletEntity == null) throw new PendingTransactionsException("wallet not exist");
         for (Partition partition : wallet.getPartitions()) {
             if (partition.hasPendingTransactions()) {
                 persistPendingTransactions(walletEntity, partition);
@@ -103,11 +103,11 @@ public class WalletRepositoryDB implements WalletRepository {
             transactionDAO.balanceOfPartition(partitionEntity.getId());
         if (currentBalance == null) {
             if (signedAmount.compareTo(BigDecimal.ZERO) < 0) {
-                throw new PendingTransactionsNotPersistedException("insufficient balance");
+                throw new PendingTransactionsException("insufficient balance");
             }
         } else {
             if (signedAmount.add(currentBalance).compareTo(BigDecimal.ZERO) < 0) {
-                throw new PendingTransactionsNotPersistedException("insufficient balance");
+                throw new PendingTransactionsException("insufficient balance");
             }
         }
     }
