@@ -71,4 +71,10 @@ public class WalletRepositoryDB implements WalletRepository {
         return partitionDAO.save(newPartition);
     }
 
+    @Override
+    public Wallet getLast() {
+        WalletEntity we = walletDAO.getTop1ByOrderByIdDesc();
+        return (we == null) ? null : new Wallet(we.getCode());
+    }
+
 }

@@ -8,6 +8,7 @@ public interface WalletRepository{
 
     String create() throws WalletNotCreatedException;
     Wallet findByCode(String code);
+    Wallet getLast();
     void persistPendingTransactions(Wallet wallet) throws PendingTransactionsNotPersistedException;
 
 }

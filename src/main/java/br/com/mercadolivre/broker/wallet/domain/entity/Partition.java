@@ -7,6 +7,7 @@ import java.util.List;
 
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
+import br.com.mercadolivre.broker.wallet.domain.exception.TransactionNotPermitedException;
 
 public class Partition {
 
@@ -35,7 +36,18 @@ public class Partition {
         if (this.transactions == null) {
             this.transactions = new ArrayList<>();
         }
+        BigDecimal newBalance = calculateNewBalance(type, amount);
+
+        if (newBalance.compareTo(BigDecimal.ZERO) < 0)
+            throw new TransactionNotPermitedException("insufficient balance");
         this.transactions.add(transaction);
+        this.balance = newBalance;
+    }
+
+    private BigDecimal calculateNewBalance(TransactionType type, BigDecimal amount) {
+        if (type.isIncome())
+            return this.balance.add(amount);
+        return this.balance.subtract(amount);
     }
 
     public boolean is(Asset asset) {

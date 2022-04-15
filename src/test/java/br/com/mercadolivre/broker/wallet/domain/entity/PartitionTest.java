@@ -35,13 +35,15 @@ public class PartitionTest {
 
     @Test
     void canWithdrawWhenBalanceIsSufficient() {
-        Partition partition = new Partition(Asset.BRL, new BigDecimal("10"));
+        Partition partition = new Partition(Asset.BRL, BigDecimal.ZERO);
+        partition.addTransaction(TransactionType.DEPOSIT, new BigDecimal("10"));
         assertTrue(partition.canWithdraw(new BigDecimal("9")));
     }
 
     @Test
     void canWithdrawWhenBalanceIsNotSufficient() {
-        Partition partition = new Partition(Asset.BRL, new BigDecimal("1"));
+        Partition partition = new Partition(Asset.BRL, BigDecimal.ZERO);
+        partition.addTransaction(TransactionType.DEPOSIT, new BigDecimal("1"));
         assertFalse(partition.canWithdraw(new BigDecimal("2")));
     }
 

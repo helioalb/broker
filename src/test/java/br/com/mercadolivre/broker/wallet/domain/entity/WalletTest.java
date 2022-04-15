@@ -33,7 +33,7 @@ public class WalletTest {
     }
 
     @Test
-    void witdrawSucces() {
+    void witdrawAmountLessThanBalance() {
         String code = "93d1ab2f-968d-4d7f-8050-b92b22c11e64";
         Set<Partition> partitions = new HashSet<>();
         partitions.add(new Partition(Asset.BRL, new BigDecimal("2")));
@@ -44,7 +44,18 @@ public class WalletTest {
     }
 
     @Test
-    void witdrawWithException() {
+    void witdrawAmountEqualsBalance() {
+        String code = "93d1ab2f-968d-4d7f-8050-b92b22c11e64";
+        Set<Partition> partitions = new HashSet<>();
+        partitions.add(new Partition(Asset.BRL, new BigDecimal("2")));
+        Wallet wallet = new Wallet(code, partitions);
+        assertDoesNotThrow(
+            () -> wallet.withdraw(Asset.BRL, new BigDecimal("2"))
+        );
+    }
+
+    @Test
+    void witdrawAmountGreaterThanBalance() {
         String code = "93d1ab2f-968d-4d7f-8050-b92b22c11e64";
         Set<Partition> partitions = new HashSet<>();
         partitions.add(new Partition(Asset.BRL, new BigDecimal("2")));
@@ -55,5 +66,22 @@ public class WalletTest {
             () -> wallet.withdraw(Asset.BRL, amount));
 
         assertEquals("insufficient balance", e.getMessage());
+    }
+
+    @Test
+    void validSequenceOfTransactionsInSamePartition() {
+        Wallet wallet = new Wallet("93d1ab2f-968d-4d7f-8050-b92b22c11e64");
+        BigDecimal amount = new BigDecimal("10");
+        wallet.deposit(Asset.BRL, amount);
+        assertDoesNotThrow(() -> wallet.withdraw(Asset.BRL, amount));
+    }
+
+    @Test
+    void validSequenceOfTransactionsInDifferentPartition() {
+        Wallet wallet = new Wallet("93d1ab2f-968d-4d7f-8050-b92b22c11e64");
+        wallet.deposit(Asset.BRL, new BigDecimal("100"));
+        wallet.deposit(Asset.VIB, new BigDecimal("10"));
+        assertDoesNotThrow(() -> wallet.withdraw(Asset.BRL, new BigDecimal("90")));
+        assertDoesNotThrow(() -> wallet.withdraw(Asset.VIB, new BigDecimal("9")));
     }
 }
