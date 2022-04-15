@@ -32,4 +32,8 @@ public class Partition {
     public List<Transaction> pendingTransactions() {
         return Collections.unmodifiableList(this.transactions);
     }
+
+    public Asset getAsset() {
+        return this.asset;
+    }
 }

@@ -1,6 +1,8 @@
 package br.com.mercadolivre.broker.wallet.domain.entity;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
@@ -13,6 +15,7 @@ public class Wallet {
 
     public Wallet(String code) {
         setCode(code);
+        this.partitions = new HashSet<>();
     }
 
     public Wallet(String code, Set<Partition> partitions) {
@@ -44,6 +47,10 @@ public class Wallet {
         Partition newPartition = new Partition(asset);
         this.partitions.add(newPartition);
         return newPartition;
+    }
+
+    public Set<Partition> getPartitions() {
+        return Collections.unmodifiableSet(this.partitions);
     }
 
     public int numberOfManagedAssets() {
