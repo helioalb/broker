@@ -7,9 +7,12 @@ import java.util.Set;
 
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
+import br.com.mercadolivre.broker.wallet.domain.exception.SendTransferException;
 import br.com.mercadolivre.broker.wallet.domain.exception.TransactionException;
 import br.com.mercadolivre.broker.wallet.domain.exception.WithdrawException;
+import lombok.Builder;
 
+@Builder
 public class Wallet {
 
     private String code;
@@ -52,7 +55,7 @@ public class Wallet {
         }
     }
 
-    private Partition findPartitionByAsset(Asset asset) {
+    public Partition findPartitionByAsset(Asset asset) {
         for (Partition partition : partitions) {
             if (partition.is(asset)) return partition;
         }
@@ -69,4 +72,17 @@ public class Wallet {
         return partitions == null || partitions.isEmpty() ? 0 : partitions.size();
     }
 
+    public void receiveTransfer(Asset asset, BigDecimal amount) {
+        Partition partition = findPartitionByAsset(asset);
+        partition.addTransaction(TransactionType.TRANSFER_RECEIVED, amount);
+    }
+
+    public void sendTransfer(Asset asset, BigDecimal amount) throws SendTransferException {
+        Partition partition = findPartitionByAsset(asset);
+        try {
+            partition.addTransaction(TransactionType.TRANSFER_SENT, amount);
+        } catch(TransactionException e) {
+            throw new SendTransferException(e.getMessage());
+        }
+    }
 }

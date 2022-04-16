@@ -32,6 +32,6 @@ public class DepositTest {
         assertEquals("success", output.getStatus());
         assertNull(output.getError());
         verify(repository, times(1))
-            .persistPendingTransactions(wallet);;
+            .persistPendingTransactions(wallet);
     }
 }

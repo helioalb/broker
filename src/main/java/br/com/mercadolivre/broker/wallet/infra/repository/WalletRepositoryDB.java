@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.mercadolivre.broker.wallet.domain.entity.Partition;
@@ -13,8 +15,10 @@ import br.com.mercadolivre.broker.wallet.domain.entity.Transaction;
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
 import br.com.mercadolivre.broker.wallet.domain.exception.PendingTransactionsException;
+import br.com.mercadolivre.broker.wallet.domain.exception.TradeException;
 import br.com.mercadolivre.broker.wallet.domain.exception.WalletNotCreatedException;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
+import br.com.mercadolivre.broker.wallet.domain.service.TradeService;
 import br.com.mercadolivre.broker.wallet.infra.repository.dao.PartitionDAO;
 import br.com.mercadolivre.broker.wallet.infra.repository.dao.PartitionEntity;
 import br.com.mercadolivre.broker.wallet.infra.repository.dao.TransactionDAO;
@@ -52,6 +56,7 @@ public class WalletRepositoryDB implements WalletRepository {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void persistPendingTransactions(Wallet wallet) throws PendingTransactionsException {
         try {
             persistPendingTransactionOnWallet(wallet);
@@ -127,6 +132,12 @@ public class WalletRepositoryDB implements WalletRepository {
             partitions.add(new Partition(pe.getAsset(), currentBalance));
         }
         return new Wallet(we.getCode(), partitions);
+    }
+
+    @Override
+    public void realize(TradeService trade) throws TradeException {
+        // TODO Auto-generated method stub
+
     }
 
 }

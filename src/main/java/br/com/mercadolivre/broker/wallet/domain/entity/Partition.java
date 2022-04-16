@@ -33,6 +33,10 @@ public class Partition {
         this.balance = balance;
     }
 
+    public BigDecimal getBalance() {
+        return this.balance;
+    }
+
     public void addTransaction(TransactionType type, BigDecimal amount) {
         Transaction transaction = new Transaction(type, amount);
         if (this.transactions == null) {
