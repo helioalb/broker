@@ -1,7 +1,5 @@
 package br.com.mercadolivre.broker.wallet.usecase.trade;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -31,7 +29,7 @@ public class TradeTest {
         when(repository.findByCode(rightWalletCode))
             .thenReturn(buildWallet(rightWalletCode, "100", "100"));
 
-        TradeOutput output = new Trade(repository)
+        new Trade(repository)
             .leftWalletCode(leftWalletCode)
             .leftAssetOut("BRL")
             .leftAmountOut(new BigDecimal("20"))
@@ -40,8 +38,6 @@ public class TradeTest {
             .rightAmountOut(new BigDecimal("30"))
             .execute();
 
-            assertEquals("success", output.getStatus());
-            assertNull(output.getError());
             verify(repository, times(1))
                 .realize(any(TradeService.class));
     }

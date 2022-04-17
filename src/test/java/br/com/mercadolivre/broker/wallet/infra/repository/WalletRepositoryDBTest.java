@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
+import br.com.mercadolivre.broker.wallet.domain.service.TradeService;
 
 @SpringBootTest()
 public class WalletRepositoryDBTest {
@@ -34,10 +35,32 @@ public class WalletRepositoryDBTest {
 
     @Test
     void persistPendingTransactions() {
-        Wallet wallet = repository.getLast();
-        wallet.deposit(Asset.BRL, new BigDecimal("1.20"));
-        assertDoesNotThrow(() -> repository.persistPendingTransactions(wallet));
+        String leftWalletCode = repository.create();
+        Wallet leftWallet = repository.findByCode(leftWalletCode);
+        leftWallet.deposit(Asset.BRL, new BigDecimal("1"));
+        leftWallet.deposit(Asset.VIB, new BigDecimal("1"));
+        repository.persistPendingTransactions(leftWallet);
+
+        String rightWalletCode = repository.create();
+        Wallet rightWallet = repository.findByCode(rightWalletCode);
+        rightWallet.deposit(Asset.BRL, new BigDecimal("1"));
+        rightWallet.deposit(Asset.VIB, new BigDecimal("1"));
+        repository.persistPendingTransactions(rightWallet);
+
+        Wallet leftWalletAfter = repository.findByCode(leftWalletCode);
+        Wallet rightWalletAfter = repository.findByCode(rightWalletCode);
+
+        BigDecimal leftWalletAfterBRL = leftWalletAfter.findPartitionByAsset(Asset.BRL).getBalance();
+        BigDecimal leftWalletAfterVIB = leftWalletAfter.findPartitionByAsset(Asset.VIB).getBalance();
+        BigDecimal rightWalletAfterBRL = rightWalletAfter.findPartitionByAsset(Asset.BRL).getBalance();
+        BigDecimal rightWalletAfterVIB = rightWalletAfter.findPartitionByAsset(Asset.VIB).getBalance();
+
+        assertEquals(new BigDecimal("1.0000"), leftWalletAfterBRL);
+        assertEquals(new BigDecimal("1.0000"), leftWalletAfterVIB);
+        assertEquals(new BigDecimal("1.0000"), rightWalletAfterBRL);
+        assertEquals(new BigDecimal("1.0000"), rightWalletAfterVIB);
     }
+
 
     @Test
     void deposit20withdraw19() {
@@ -50,5 +73,37 @@ public class WalletRepositoryDBTest {
         wallet2.withdraw(Asset.BRL, new BigDecimal("19"));
 
         assertDoesNotThrow(() -> repository.persistPendingTransactions(wallet2));
+    }
+
+    @Test
+    void realize() {
+        String leftWalletCode = repository.create();
+        Wallet leftWallet = repository.findByCode(leftWalletCode);
+        leftWallet.deposit(Asset.BRL, new BigDecimal("1000"));
+        leftWallet.deposit(Asset.VIB, new BigDecimal("1000"));
+        repository.persistPendingTransactions(leftWallet);
+
+        String rightWalletCode = repository.create();
+        Wallet rightWallet = repository.findByCode(rightWalletCode);
+        rightWallet.deposit(Asset.BRL, new BigDecimal("1000"));
+        rightWallet.deposit(Asset.VIB, new BigDecimal("1000"));
+        repository.persistPendingTransactions(rightWallet);
+
+        TradeService trade = new TradeService(leftWallet, rightWallet);
+        trade.transfer(Asset.BRL, new BigDecimal("100"), Asset.VIB, new BigDecimal("100"));
+
+        repository.realize(trade);
+        Wallet leftWalletAfter = repository.findByCode(leftWalletCode);
+        Wallet rightWalletAfter = repository.findByCode(rightWalletCode);
+
+        BigDecimal leftWalletAfterBRL = leftWalletAfter.findPartitionByAsset(Asset.BRL).getBalance();
+        BigDecimal leftWalletAfterVIB = leftWalletAfter.findPartitionByAsset(Asset.VIB).getBalance();
+        BigDecimal rightWalletAfterBRL = rightWalletAfter.findPartitionByAsset(Asset.BRL).getBalance();
+        BigDecimal rightWalletAfterVIB = rightWalletAfter.findPartitionByAsset(Asset.VIB).getBalance();
+
+        assertEquals(new BigDecimal("900.0000"), leftWalletAfterBRL);
+        assertEquals(new BigDecimal("1100.0000"), leftWalletAfterVIB);
+        assertEquals(new BigDecimal("1100.0000"), rightWalletAfterBRL);
+        assertEquals(new BigDecimal("900.0000"), rightWalletAfterVIB);
     }
 }
