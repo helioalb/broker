@@ -4,14 +4,10 @@ import java.math.BigDecimal;
 
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
-import br.com.mercadolivre.broker.wallet.domain.exception.TradeException;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 import br.com.mercadolivre.broker.wallet.domain.service.TradeService;
 
 public class Trade {
-    private WalletRepository walletRepository;
-    private String leftWalletId;
-    private String rightWalletId;
     private Asset leftAssetOut;
     private BigDecimal leftAmountOut;
     private Asset rightAssetOut;
@@ -54,14 +50,9 @@ public class Trade {
         return this;
     }
 
-    public TradeOutput execute() {
-        try {
-            TradeService trade = new TradeService(leftWallet, rightWallet);
-            trade.transfer(leftAssetOut, leftAmountOut, rightAssetOut, rightAmountOut);
-            repository.realize(trade);
-            return new TradeOutput().withSuccess();
-        } catch (Exception e) {
-            return new TradeOutput().withError(e.getMessage());
-        }
+    public void execute() {
+        TradeService trade = new TradeService(leftWallet, rightWallet);
+        trade.transfer(leftAssetOut, leftAmountOut, rightAssetOut, rightAmountOut);
+        repository.realize(trade);
     }
 }

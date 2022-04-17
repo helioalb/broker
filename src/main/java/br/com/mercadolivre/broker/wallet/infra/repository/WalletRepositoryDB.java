@@ -135,9 +135,14 @@ public class WalletRepositoryDB implements WalletRepository {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void realize(TradeService trade) throws TradeException {
-        // TODO Auto-generated method stub
-
+        try {
+            persistPendingTransactionOnWallet(trade.getLeftWallet());
+            persistPendingTransactionOnWallet(trade.getRightWallet());
+        } catch (Exception e) {
+            throw new TradeException(e.getMessage());
+        }
     }
 
 }

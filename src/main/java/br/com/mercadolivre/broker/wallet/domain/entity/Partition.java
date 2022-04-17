@@ -75,4 +75,8 @@ public class Partition {
     public boolean canWithdraw(BigDecimal amount) {
         return amount.compareTo(this.balance) <= 0;
     }
+
+    public void clearTransactions() {
+        this.transactions = null;
+    }
 }

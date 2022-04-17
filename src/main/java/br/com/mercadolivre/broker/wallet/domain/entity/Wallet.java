@@ -10,9 +10,7 @@ import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
 import br.com.mercadolivre.broker.wallet.domain.exception.SendTransferException;
 import br.com.mercadolivre.broker.wallet.domain.exception.TransactionException;
 import br.com.mercadolivre.broker.wallet.domain.exception.WithdrawException;
-import lombok.Builder;
 
-@Builder
 public class Wallet {
 
     private String code;
@@ -84,5 +82,14 @@ public class Wallet {
         } catch(TransactionException e) {
             throw new SendTransferException(e.getMessage());
         }
+    }
+
+    public Wallet clearTransactions() {
+        if (partitions != null) {
+            for(Partition partition : partitions) {
+                partition.clearTransactions();
+            }
+        }
+        return this;
     }
 }

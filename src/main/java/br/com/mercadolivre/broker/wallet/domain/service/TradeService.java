@@ -11,8 +11,8 @@ public class TradeService {
     private Wallet rightWallet;
 
     public TradeService(Wallet leftWallet, Wallet rightWallet) {
-        this.leftWallet = leftWallet;
-        this.rightWallet = rightWallet;
+        this.leftWallet = leftWallet.clearTransactions();
+        this.rightWallet = rightWallet.clearTransactions();
     }
 
     public void transfer(Asset leftAssetOut, BigDecimal leftAmountOut, Asset rightAssetOut, BigDecimal rightAmountOut) {
