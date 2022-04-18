@@ -12,7 +12,7 @@ import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Ask;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.AskRepository;
 
 @SpringBootTest
-public class AskRepositoryDBTest {
+public class AskRepositoryPostgresTest {
     @Autowired
     private AskRepository repository;
 

@@ -16,7 +16,7 @@ import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 import br.com.mercadolivre.broker.wallet.domain.service.TradeService;
 
 @SpringBootTest()
-public class WalletRepositoryDBTest {
+public class WalletRepositoryPostgresTest {
 
     @Autowired
     private WalletRepository repository;

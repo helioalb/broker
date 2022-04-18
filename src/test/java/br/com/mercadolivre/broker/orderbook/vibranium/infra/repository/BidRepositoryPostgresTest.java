@@ -12,7 +12,7 @@ import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Bid;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.BidRepository;
 
 @SpringBootTest
-public class BidRepositoryDBTest {
+public class BidRepositoryPostgresTest {
     @Autowired
     private BidRepository repository;
 

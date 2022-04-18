@@ -8,7 +8,7 @@ import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.AskRepos
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.dao.AskDAO;
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.dao.AskEntity;
 
-public class AskRepositoryDB implements AskRepository {
+public class AskRepositoryPostgres implements AskRepository {
 
     @Autowired
     private AskDAO dao;

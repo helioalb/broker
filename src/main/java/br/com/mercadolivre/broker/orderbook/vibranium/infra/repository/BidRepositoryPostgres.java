@@ -7,7 +7,7 @@ import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.BidRepos
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.dao.BidDAO;
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.dao.BidEntity;
 
-public class BidRepositoryDB implements BidRepository {
+public class BidRepositoryPostgres implements BidRepository {
 
     @Autowired
     private BidDAO dao;

@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Bean;
 
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.AskRepository;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.BidRepository;
-import br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.AskRepositoryDB;
-import br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.BidRepositoryDB;
+import br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.AskRepositoryPostgres;
+import br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.BidRepositoryPostgres;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
-import br.com.mercadolivre.broker.wallet.infra.repository.WalletRepositoryDB;
+import br.com.mercadolivre.broker.wallet.infra.repository.WalletRepositoryPostgres;
 
 @SpringBootApplication
 public class BrokerApplication {
@@ -20,16 +20,16 @@ public class BrokerApplication {
 
     @Bean
     public WalletRepository walletRepository() {
-        return new WalletRepositoryDB();
+        return new WalletRepositoryPostgres();
     }
 
     @Bean
     public AskRepository askRepository() {
-        return new AskRepositoryDB();
+        return new AskRepositoryPostgres();
     }
 
     @Bean
     public BidRepository bidRepository() {
-        return new BidRepositoryDB();
+        return new BidRepositoryPostgres();
     }
 }
