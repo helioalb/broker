@@ -20,7 +20,7 @@ public class PriceTimePriorityMatcher extends MatcherEngine {
         Bid bid = new Bid(walletCode, quantity, price);
         Ask ask = askRepository.top();
 
-        if (bid.comparePriceWith(ask) >= 0) {
+        if (ask != null && bid.comparePriceWith(ask) >= 0) {
             if (bid.compareQuantityWith(ask) == 0) {
                 BigDecimal tradeQuantity = ask.getQuantity();
                 trade.leftWalletCode(bid.getWalletCode()).leftAmountOut(bid.amountForQuantity(tradeQuantity))
@@ -72,7 +72,7 @@ public class PriceTimePriorityMatcher extends MatcherEngine {
         Ask ask = new Ask(walletCode, quantity, price);;
         Bid bid = bidRepository.top();
 
-        if (ask.comparePriceWith(bid) <= 0) {
+        if (bid != null && ask.comparePriceWith(bid) <= 0) {
             if (ask.compareQuantityWith(bid) == 0) {
                 BigDecimal tradeQuantity = ask.getQuantity();
                 trade.leftWalletCode(bid.getWalletCode())
