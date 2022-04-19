@@ -26,7 +26,7 @@ import br.com.mercadolivre.broker.wallet.infra.repository.dao.TransactionVO;
 import br.com.mercadolivre.broker.wallet.infra.repository.dao.WalletDAO;
 import br.com.mercadolivre.broker.wallet.infra.repository.dao.WalletEntity;
 
-public class WalletRepositoryDB implements WalletRepository {
+public class WalletRepositoryPostgres implements WalletRepository {
     @Autowired
     private WalletDAO walletDAO;
 
