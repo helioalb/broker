@@ -6,10 +6,19 @@ import lombok.Getter;
 
 @Getter
 public abstract class Intent {
+    protected Long id;
     protected String walletCode;
     protected BigDecimal quantity;
     protected BigDecimal price;
     protected String tradedWith;
+    protected BigDecimal tradedQuantity;
+
+    protected Intent(Long id, String walletCode, BigDecimal quantity, BigDecimal price) {
+        this.id = id;
+        this.walletCode = walletCode;
+        this.quantity = quantity;
+        this.price = price;
+    }
 
     protected Intent(String walletCode, BigDecimal quantity, BigDecimal price) {
         this.walletCode = walletCode;
@@ -31,10 +40,11 @@ public abstract class Intent {
         return quantity.multiply(price);
     }
 
-    public void tradedWith(Intent other) {
+    public void tradedWith(Intent other, BigDecimal quantity) {
         if (this.walletCode.equals(other.getWalletCode()))
             throw new IllegalArgumentException("trade with itself is not permitted");
         this.tradedWith = other.getWalletCode();
+        this.tradedQuantity = quantity;
     }
 
     public BigDecimal decreasedQuantityBasedOn(Intent other) {

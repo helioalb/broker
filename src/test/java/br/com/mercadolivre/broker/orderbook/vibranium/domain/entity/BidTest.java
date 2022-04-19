@@ -12,7 +12,7 @@ public class BidTest {
     void createNewAfterTradeWith() {
         Bid bid = new Bid("abc", new BigDecimal("2"), new BigDecimal("1"));
         Ask ask = new Ask("def", new BigDecimal("1"), new BigDecimal("1"));
-        bid.tradedWith(ask);
+        bid.tradedWith(ask, new BigDecimal("1"));
 
         Bid newBid = bid.createNewAfterTradeWith(ask);
 

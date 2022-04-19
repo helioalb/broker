@@ -13,6 +13,7 @@ import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.BidRepos
 
 @SpringBootTest
 public class BidRepositoryPostgresTest {
+
     @Autowired
     private BidRepository repository;
 

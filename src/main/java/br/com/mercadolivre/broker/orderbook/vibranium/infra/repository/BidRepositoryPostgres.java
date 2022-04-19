@@ -16,12 +16,13 @@ public class BidRepositoryPostgres implements BidRepository {
     public Bid top() {
         BidEntity be = dao.top();
         if (be == null) return null;
-        return new Bid(be.getWalletCode(), be.getQuantity(), be.getPrice());
+        return new Bid(be.getId(), be.getWalletCode(), be.getQuantity(), be.getPrice());
     }
 
     @Override
     public void save(Bid b) {
-        dao.save(new BidEntity(b.getWalletCode(), b.getQuantity(), b.getPrice()));
+        dao.save(new BidEntity(b.getId(), b.getWalletCode(), b.getQuantity(),
+                               b.getPrice(), b.getTradedWith(), b.getTradedQuantity()));
     }
 
 }

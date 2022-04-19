@@ -9,7 +9,7 @@
     </parent>
     <groupId>br.com.mercadolivre</groupId>
     <artifactId>broker</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.0</version>
     <name>broker</name>
     <description>Mini broker</description>
     <properties>

@@ -23,10 +23,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AskEntity {
 
-    public AskEntity(String walletCode, BigDecimal quantity, BigDecimal price) {
+    public AskEntity(Long id, String walletCode, BigDecimal quantity, BigDecimal price) {
+        this.id = id;
         this.walletCode = walletCode;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    public AskEntity(Long id, String walletCode, BigDecimal quantity,
+                     BigDecimal price, String tradedWith, BigDecimal tradedQuantity) {
+        this.id = id;
+        this.walletCode = walletCode;
+        this.quantity = quantity;
+        this.price = price;
+        this.tradedWith = tradedWith;
+        this.tradedQuantity = tradedQuantity;
     }
 
     @Id
@@ -44,6 +55,9 @@ public class AskEntity {
 
     @Column(name = "traded_with", nullable = true, updatable = true)
     private String tradedWith;
+
+    @Column(name = "traded_quantity", nullable = true, updatable = true)
+    private BigDecimal tradedQuantity;
 
     @Column(name = "updated_at")
     @UpdateTimestamp

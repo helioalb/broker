@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 
 public class Ask extends Intent {
 
+    public Ask(Long id, String walletCode, BigDecimal quantity, BigDecimal price) {
+        super(id, walletCode, quantity, price);
+    }
+
     public Ask(String walletCode, BigDecimal quantity, BigDecimal price) {
         super(walletCode, quantity, price);
     }
