@@ -17,7 +17,6 @@ import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
 import br.com.mercadolivre.broker.wallet.domain.exception.PendingTransactionsException;
 import br.com.mercadolivre.broker.wallet.domain.exception.TradeException;
-import br.com.mercadolivre.broker.wallet.domain.exception.WalletNotCreatedException;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 import br.com.mercadolivre.broker.wallet.domain.service.TradeService;
 import br.com.mercadolivre.broker.wallet.infra.repository.dao.PartitionDAO;
@@ -38,12 +37,8 @@ public class WalletRepositoryPostgres implements WalletRepository {
     private TransactionDAO transactionDAO;
 
     @Override
-    public String create() throws WalletNotCreatedException {
-        try {
-            return walletDAO.save(new WalletEntity(generateCode())).getCode();
-        } catch (Exception e) {
-            throw new WalletNotCreatedException(e.getMessage());
-        }
+    public String create() {
+        return walletDAO.save(new WalletEntity(generateCode())).getCode();
     }
 
     private String generateCode() {

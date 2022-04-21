@@ -178,9 +178,9 @@ public class PriceTimePriorityMatcherTest {
         BigDecimal askBRL = balanceAfter(walletRepository, askWalletCode, Asset.BRL);
         BigDecimal askVIB = balanceAfter(walletRepository, askWalletCode, Asset.VIB);
 
-        assertEquals(new BigDecimal("999.5"), bidBRL);
+        assertEquals(new BigDecimal("999"), bidBRL);
         assertEquals(new BigDecimal("1001"), bidVIB);
-        assertEquals(new BigDecimal("1000.5"), askBRL);
+        assertEquals(new BigDecimal("1001"), askBRL);
         assertEquals(new BigDecimal("999"), askVIB);
     }
 
