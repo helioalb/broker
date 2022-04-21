@@ -1,5 +1,7 @@
 package br.com.mercadolivre.broker.wallet.usecase.withdraw;
 
+import java.util.Optional;
+
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 
@@ -12,10 +14,13 @@ public class Withdraw {
     }
 
     public WithdrawOutput execute(WithdrawInput input) {
-        Wallet wallet = repository.findByCode(input.getCode());
+        Optional<Wallet> wallet = repository.findByCode(input.getCode());
         try {
-            wallet.withdraw(input.getAsset(), input.getAmount());
-            this.repository.persistPendingTransactions(wallet);
+            // TODO: Refactor code below
+            if (wallet.isEmpty())
+                throw new IllegalStateException("wallet not exists");
+            wallet.get().withdraw(input.getAsset(), input.getAmount());
+            this.repository.persistPendingTransactions(wallet.get());
             return new WithdrawOutput().withSuccess();
         } catch (Exception e) {
             return new WithdrawOutput().withError(e.getMessage());

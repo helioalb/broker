@@ -3,6 +3,7 @@ package br.com.mercadolivre.broker.wallet.infra.repository;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -50,9 +51,9 @@ public class WalletRepositoryPostgres implements WalletRepository {
     }
 
     @Override
-    public Wallet findByCode(String code) {
+    public Optional<Wallet> findByCode(String code) {
         WalletEntity we = walletDAO.getByCode(code);
-        return buildWalletFrom(we);
+        return Optional.ofNullable(buildWalletFrom(we));
     }
 
     @Override

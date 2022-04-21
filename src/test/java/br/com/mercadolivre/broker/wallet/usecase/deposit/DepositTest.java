@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,7 @@ public class DepositTest {
         String amount = "1200.12";
         Wallet wallet = new Wallet(walletCode, new HashSet<>());
         WalletRepository repository = mock(WalletRepository.class);
-        when(repository.findByCode(anyString())).thenReturn(wallet);
+        when(repository.findByCode(anyString())).thenReturn(Optional.of(wallet));
 
         DepositInput input = new DepositInput(walletCode, asset, amount);
         DepositOutput output = new Deposit(repository).execute(input);

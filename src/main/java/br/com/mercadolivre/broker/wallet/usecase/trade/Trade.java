@@ -21,12 +21,12 @@ public class Trade {
     }
 
     public Trade leftWalletCode(String code) {
-        this.leftWallet = repository.findByCode(code);
+        repository.findByCode(code).ifPresent(wallet -> this.leftWallet = wallet);
         return this;
     }
 
     public Trade rightWalletCode(String code) {
-        this.rightWallet = repository.findByCode(code);
+        repository.findByCode(code).ifPresent(wallet -> this.rightWallet = wallet);
         return this;
     }
 
@@ -54,5 +54,9 @@ public class Trade {
         TradeService trade = new TradeService(leftWallet, rightWallet);
         trade.transfer(leftAssetOut, leftAmountOut, rightAssetOut, rightAmountOut);
         repository.realize(trade);
+    }
+
+    public boolean isAvailableFor(String walletCode) {
+        return repository.findByCode(walletCode).isPresent();
     }
 }

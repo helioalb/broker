@@ -17,6 +17,10 @@ public class PriceTimePriorityMatcher extends MatcherEngine {
     @Override
     @Transactional
     public void processBid(String walletCode, BigDecimal quantity, BigDecimal price) {
+        if (!trade.isAvailableFor(walletCode)) {
+            throw new IllegalStateException("wallet " + walletCode + "not exists");
+        }
+
         Bid bid = new Bid(walletCode, quantity, price);
         askRepository.top().ifPresentOrElse(ask -> {
             if (bid.comparePriceWith(ask) < 0) bidRepository.save(bid);
@@ -42,6 +46,10 @@ public class PriceTimePriorityMatcher extends MatcherEngine {
     @Override
     @Transactional
     public void processAsk(String walletCode, BigDecimal quantity, BigDecimal price) {
+        if (!trade.isAvailableFor(walletCode)) {
+            throw new IllegalStateException("wallet " + walletCode + "not exists");
+        }
+
         Ask ask = new Ask(walletCode, quantity, price);
         bidRepository.top().ifPresentOrElse(bid -> {
             if (ask.comparePriceWith(bid) > 0) askRepository.save(ask);

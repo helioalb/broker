@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ public class WithdrawTest {
         partitions.add(partition);
         Wallet wallet = new Wallet(walletCode, partitions);
         WalletRepository repository = mock(WalletRepository.class);
-        when(repository.findByCode(anyString())).thenReturn(wallet);
+        when(repository.findByCode(anyString())).thenReturn(Optional.of(wallet));
         return repository;
     }
 }

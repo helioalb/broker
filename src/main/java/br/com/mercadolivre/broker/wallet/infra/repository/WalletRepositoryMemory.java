@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import br.com.mercadolivre.broker.wallet.domain.entity.Partition;
@@ -34,8 +35,8 @@ public class WalletRepositoryMemory implements WalletRepository {
     }
 
     @Override
-    public Wallet findByCode(String code) {
-        return this.wallets.get(code);
+    public Optional<Wallet> findByCode(String code) {
+        return Optional.ofNullable(this.wallets.get(code));
     }
 
     @Override

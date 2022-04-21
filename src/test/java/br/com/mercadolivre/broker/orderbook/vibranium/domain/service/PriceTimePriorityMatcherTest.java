@@ -205,7 +205,7 @@ public class PriceTimePriorityMatcherTest {
 
     private BigDecimal balanceAfter(WalletRepository walletRepository,
         String bidWalletCode, Asset asset) {
-        return walletRepository.findByCode(bidWalletCode)
+        return walletRepository.findByCode(bidWalletCode).get()
                 .findPartitionByAsset(asset).getBalance();
     }
 
