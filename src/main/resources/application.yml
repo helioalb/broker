@@ -8,3 +8,12 @@ spring:
       ddl-auto: validate
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  rabbitmq:
+    host: localhost
+    password: guest
+    username: guest
+    port: 15672
+    order:
+      exchange: order.exchange
+      queue: order.queue
+      routingkey: order.routingkey
