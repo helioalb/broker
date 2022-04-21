@@ -1,5 +1,7 @@
 package br.com.mercadolivre.broker.orderbook.vibranium.infra.repository;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Bid;
@@ -13,10 +15,14 @@ public class BidRepositoryPostgres implements BidRepository {
     private BidDAO dao;
 
     @Override
-    public Bid top() {
+    public Optional<Bid> top() {
         BidEntity be = dao.top();
-        if (be == null) return null;
-        return new Bid(be.getId(), be.getWalletCode(), be.getQuantity(), be.getPrice());
+        if (be == null) return Optional.empty();
+        Bid bid = new Bid(be.getId(),
+                          be.getWalletCode(),
+                          be.getQuantity(),
+                          be.getPrice());
+        return Optional.of(bid);
     }
 
     @Override

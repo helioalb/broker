@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -230,8 +231,10 @@ public class PriceTimePriorityMatcherTest {
     private AskRepository buildAskRepository(String walletCode, String q1,
         String p1, String q2, String p2) {
         AskRepository repository = mock(AskRepository.class);
-        Ask a1 = new Ask(walletCode, new BigDecimal(q1), new BigDecimal(p1));
-        Ask a2 = new Ask(walletCode, new BigDecimal(q2), new BigDecimal(p2));
+        Optional<Ask> a1 = Optional.of(
+            new Ask(walletCode, new BigDecimal(q1), new BigDecimal(p1)));
+        Optional<Ask> a2 = Optional.of(
+            new Ask(walletCode, new BigDecimal(q2), new BigDecimal(p2)));
         when(repository.top()).thenReturn(a1).thenReturn(a2);
         return repository;
     }
@@ -239,8 +242,10 @@ public class PriceTimePriorityMatcherTest {
     private BidRepository buildBidRepository(String walletCode, String q1,
         String p1, String q2, String p2) {
         BidRepository repository = mock(BidRepository.class);
-        Bid b1 = new Bid(walletCode, new BigDecimal(q1), new BigDecimal(p1));
-        Bid b2 = new Bid(walletCode, new BigDecimal(q2), new BigDecimal(p2));
+        Optional<Bid> b1 = Optional.of(
+            new Bid(walletCode, new BigDecimal(q1), new BigDecimal(p1)));
+        Optional<Bid> b2 = Optional.of(
+            new Bid(walletCode, new BigDecimal(q2), new BigDecimal(p2)));
         when(repository.top()).thenReturn(b1).thenReturn(b2);
         return repository;
     }

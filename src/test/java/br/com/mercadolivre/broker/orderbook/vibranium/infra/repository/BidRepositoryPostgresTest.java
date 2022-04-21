@@ -24,7 +24,7 @@ public class BidRepositoryPostgresTest {
         repository.save(buildBid(walletCode, "1", "2"));
         repository.save(buildBid(walletCode, "1", "2"));
 
-        assertEquals(new BigDecimal("2.0000"), repository.top().getPrice());
+        assertEquals(new BigDecimal("2.0000"), repository.top().get().getPrice());
     }
 
     private Bid buildBid(String walletCode, String quantity, String price) {

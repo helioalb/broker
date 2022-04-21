@@ -1,5 +1,7 @@
 package br.com.mercadolivre.broker.orderbook.vibranium.infra.repository;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Ask;
@@ -13,10 +15,14 @@ public class AskRepositoryPostgres implements AskRepository {
     private AskDAO dao;
 
     @Override
-    public Ask top() {
+    public Optional<Ask> top() {
         AskEntity ae = dao.top();
-        if (ae == null) return null;
-        return new Ask(ae.getId(), ae.getWalletCode(), ae.getQuantity(), ae.getPrice());
+        if (ae == null) return Optional.empty();
+        Ask ask = new Ask(ae.getId(),
+                          ae.getWalletCode(),
+                          ae.getQuantity(),
+                          ae.getPrice());
+        return Optional.of(ask);
     }
 
     @Override
