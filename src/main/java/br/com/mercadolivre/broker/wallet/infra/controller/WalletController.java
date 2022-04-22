@@ -1,6 +1,8 @@
 package br.com.mercadolivre.broker.wallet.infra.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,45 +17,38 @@ import br.com.mercadolivre.broker.wallet.infra.controller.dto.WithdrawInputDto;
 import br.com.mercadolivre.broker.wallet.usecase.createwallet.CreateWallet;
 import br.com.mercadolivre.broker.wallet.usecase.deposit.Deposit;
 import br.com.mercadolivre.broker.wallet.usecase.deposit.DepositInput;
-import br.com.mercadolivre.broker.wallet.usecase.deposit.DepositOutput;
 import br.com.mercadolivre.broker.wallet.usecase.withdraw.Withdraw;
 import br.com.mercadolivre.broker.wallet.usecase.withdraw.WithdrawInput;
-import br.com.mercadolivre.broker.wallet.usecase.withdraw.WithdrawOutput;
 
 @RestController
 @RequestMapping("wallets")
 public class WalletController {
-    @Autowired
     private WalletRepository repository;
+
+    public WalletController(WalletRepository repository) {
+        this.repository = repository;
+    }
 
     @PostMapping
     public ResponseEntity<CreateOutput> createWallet() {
         CreateOutput output = new CreateOutput();
         output.setId(new CreateWallet(repository).execute());
-        return ResponseEntity.ok(output);
+        return ResponseEntity.status(HttpStatus.CREATED).body(output);
     }
 
-    @PostMapping(path = "/{id}/deposit")
-    public DepositOutput deposit(@RequestBody DepositInputDto deposit,
-                                 @PathVariable String id) {
-        try {
-            DepositInput input =
-                new DepositInput(id, deposit.getAsset(), deposit.getAmount());
-            return new Deposit(repository).execute(input);
-        } catch(Exception e) {
-            return new DepositOutput().withError(e.getMessage());
-        }
+    @PostMapping(path = "{id}/deposit")
+    public ResponseEntity<Void> deposit(@Valid @RequestBody DepositInputDto in,
+                                        @PathVariable String id) {
+        DepositInput input = new DepositInput(id, in.getAsset(), in.getAmount());
+        new Deposit(repository).execute(input);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
-    @PostMapping(path = "/{id}/withdraw")
-    public WithdrawOutput withdraw(@RequestBody WithdrawInputDto withdraw,
-                                   @PathVariable String id) {
-        try {
-            WithdrawInput input =
-                new WithdrawInput(id, withdraw.getAsset(), withdraw.getAmount());
-            return new Withdraw(repository).execute(input);
-        } catch(Exception e) {
-            return new WithdrawOutput().withError(e.getMessage());
-        }
+    @PostMapping(path = "{id}/withdraw")
+    public ResponseEntity<Void> withdraw(@Valid @RequestBody WithdrawInputDto in,
+                                         @PathVariable String id) {
+        WithdrawInput input = new WithdrawInput(id, in.getAsset(), in.getAmount());
+        new Withdraw(repository).execute(input);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }

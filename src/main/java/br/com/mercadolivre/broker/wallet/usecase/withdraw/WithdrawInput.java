@@ -12,10 +12,10 @@ public class WithdrawInput {
     private Asset asset;
     private BigDecimal amount;
 
-    public WithdrawInput(String walletCode, String asset, String amount) {
+    public WithdrawInput(String walletCode, Asset asset, BigDecimal amount) {
         this.code = walletCode;
-        this.asset = Asset.valueOf(asset);
-        this.amount = new BigDecimal(amount);
+        this.asset = asset;
+        this.amount = amount;
     }
 
 }

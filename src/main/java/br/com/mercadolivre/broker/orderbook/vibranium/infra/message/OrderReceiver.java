@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.service.MatcherEngine;
+import br.com.mercadolivre.broker.orderbook.vibranium.infra.dto.BidInput;
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.dto.OrderInput;
 import br.com.mercadolivre.broker.orderbook.vibranium.usecase.CreateAsk;
 import br.com.mercadolivre.broker.orderbook.vibranium.usecase.createbid.CreateBid;
@@ -20,20 +21,24 @@ public class OrderReceiver implements RabbitListenerConfigurer {
 
     @Override
     public void configureRabbitListeners(RabbitListenerEndpointRegistrar registrar) {
-
+        // Not overrided
     }
 
     @RabbitListener(queues = "${spring.rabbitmq.order.queue}")
     public void received(OrderInput order) {
         log.info("[ORDER][RECEIVED]" + order);
-        if (order.getType().equals("BID")) {
-            new CreateBid(matcherEngine).execute(order.getWalletCode(),
-                                                 order.getQuantity(),
-                                                 order.getPrice());
-        } else {
-            new CreateAsk(matcherEngine).execute(order.getWalletCode(),
-                                                 order.getQuantity(),
-                                                 order.getPrice());
+        try {
+            if (order instanceof BidInput) {
+                new CreateBid(matcherEngine).execute(order.getWalletCode(),
+                                                    order.getQuantity(),
+                                                    order.getPrice());
+            } else {
+                new CreateAsk(matcherEngine).execute(order.getWalletCode(),
+                                                    order.getQuantity(),
+                                                    order.getPrice());
+            }
+        } catch (Exception e) {
+            log.error("[ORDER][ERROR]: %s" +  e.getMessage());
         }
     }
 }

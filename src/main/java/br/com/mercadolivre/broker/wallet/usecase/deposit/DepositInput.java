@@ -11,10 +11,10 @@ public class DepositInput {
     private Asset asset;
     private BigDecimal amount;
 
-    public DepositInput(String walletCode, String asset, String amount) {
+    public DepositInput(String walletCode, Asset asset, BigDecimal amount) {
         this.code = walletCode;
-        this.asset = Asset.valueOf(asset);
-        this.amount = new BigDecimal(amount);
+        this.asset = asset;
+        this.amount = amount;
     }
 
 }

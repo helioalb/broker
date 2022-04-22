@@ -1,7 +1,8 @@
 package br.com.mercadolivre.broker.wallet.usecase.withdraw;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import br.com.mercadolivre.broker.wallet.domain.entity.Partition;
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
 import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
+import br.com.mercadolivre.broker.wallet.domain.exception.WithdrawException;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 
 public class WithdrawTest {
@@ -24,11 +26,12 @@ public class WithdrawTest {
         String walletCode = "93d1ab2f-968d-4d7f-8050-b92b22c11e64";
         WalletRepository repository = buildRepository(walletCode);
 
-        WithdrawInput input = new WithdrawInput(walletCode, "BRL", "3");
-        WithdrawOutput output = new Withdraw(repository).execute(input);
+        WithdrawInput input = new WithdrawInput(walletCode, Asset.BRL, new BigDecimal("3"));
 
-        assertEquals("error", output.getStatus());
-        assertEquals("insufficient balance", output.getError());
+        Withdraw withdraw = new Withdraw(repository);
+        Exception e = assertThrows(WithdrawException.class, () -> withdraw.execute(input));
+
+        assertEquals("insufficient balance", e.getMessage());
     }
 
     @Test
@@ -36,11 +39,8 @@ public class WithdrawTest {
         String walletCode = "93d1ab2f-968d-4d7f-8050-b92b22c11e64";
         WalletRepository repository = buildRepository(walletCode);
 
-        WithdrawInput input = new WithdrawInput(walletCode, "BRL", "2");
-        WithdrawOutput output = new Withdraw(repository).execute(input);
-
-        assertEquals("success", output.getStatus());
-        assertNull(output.getError());
+        WithdrawInput input = new WithdrawInput(walletCode, Asset.BRL, new BigDecimal("2"));
+        assertDoesNotThrow(() -> new Withdraw(repository).execute(input));
     }
 
     private WalletRepository buildRepository(String walletCode) {
