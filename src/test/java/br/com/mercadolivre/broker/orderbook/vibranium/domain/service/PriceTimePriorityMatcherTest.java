@@ -10,12 +10,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import br.com.mercadolivre.broker.common.enums.Asset;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Ask;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Bid;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.factory.RepositoryFactory;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.AskRepository;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.BidRepository;
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 import br.com.mercadolivre.broker.wallet.infra.repository.WalletRepositoryMemory;
 
@@ -23,12 +23,14 @@ public class PriceTimePriorityMatcherTest {
     private String askWalletCode;
     private String bidWalletCode;
     private WalletRepository walletRepository;
+    private TradeSender tradeSender;
 
     @BeforeEach
     void setup() {
         askWalletCode = "askask63-cb68-4335-b5a3-25a269564268";
         bidWalletCode = "bidbid63-cb68-4335-b5a3-25a269564268";
         walletRepository = new WalletRepositoryMemory();
+        tradeSender = mock(TradeSender.class);
     }
 
 
@@ -37,7 +39,7 @@ public class PriceTimePriorityMatcherTest {
         RepositoryFactory repositoryFactory = buildRepositoryFactory(askWalletCode,
             bidWalletCode, walletRepository, "1", "1", "1", "1", "1", "1", "1", "1");
 
-        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory);
+        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory, tradeSender);
         priceTimePriority.processBid(bidWalletCode, new BigDecimal("1"), new BigDecimal("1"));
 
         BigDecimal bidBRL = balanceAfter(walletRepository, bidWalletCode, Asset.BRL);
@@ -56,7 +58,7 @@ public class PriceTimePriorityMatcherTest {
         RepositoryFactory repositoryFactory = buildRepositoryFactory(askWalletCode,
             bidWalletCode, walletRepository, "1", "1", "1", "1", "1", "1", "1", "1");
 
-        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory);
+        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory, tradeSender);
         priceTimePriority.processBid(bidWalletCode, new BigDecimal("2"), new BigDecimal("1"));
 
         BigDecimal bidBRL = balanceAfter(walletRepository, bidWalletCode, Asset.BRL);
@@ -75,7 +77,7 @@ public class PriceTimePriorityMatcherTest {
         RepositoryFactory repositoryFactory = buildRepositoryFactory(askWalletCode,
             bidWalletCode, walletRepository, "1", "1", "1", "1", "1", "1", "1", "1");
 
-        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory);
+        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory, tradeSender);
         priceTimePriority.processBid(bidWalletCode, new BigDecimal("0.5"), new BigDecimal("1"));
 
         BigDecimal bidBRL = balanceAfter(walletRepository, bidWalletCode, Asset.BRL);
@@ -94,7 +96,7 @@ public class PriceTimePriorityMatcherTest {
         RepositoryFactory repositoryFactory = buildRepositoryFactory(askWalletCode,
             bidWalletCode, walletRepository, "1", "1", "1", "1", "1", "1", "1", "1");
 
-        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory);
+        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory, tradeSender);
         priceTimePriority.processBid(bidWalletCode, new BigDecimal("1"), new BigDecimal("0.5"));
 
         BigDecimal bidBRL = balanceAfter(walletRepository, bidWalletCode, Asset.BRL);
@@ -113,7 +115,7 @@ public class PriceTimePriorityMatcherTest {
         RepositoryFactory repositoryFactory = buildRepositoryFactory(askWalletCode,
             bidWalletCode, walletRepository, "1", "1", "1", "1", "1", "1", "1", "1");
 
-        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory);
+        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory, tradeSender);
         priceTimePriority.processAsk(askWalletCode, new BigDecimal("1"), new BigDecimal("1"));
 
         BigDecimal bidBRL = balanceAfter(walletRepository, bidWalletCode, Asset.BRL);
@@ -132,7 +134,7 @@ public class PriceTimePriorityMatcherTest {
         RepositoryFactory repositoryFactory = buildRepositoryFactory(askWalletCode,
             bidWalletCode, walletRepository, "1", "1", "1", "1", "1", "1", "1", "1");
 
-        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory);
+        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory, tradeSender);
         priceTimePriority.processAsk(askWalletCode, new BigDecimal("2"), new BigDecimal("1"));
 
         BigDecimal bidBRL = balanceAfter(walletRepository, bidWalletCode, Asset.BRL);
@@ -151,7 +153,7 @@ public class PriceTimePriorityMatcherTest {
         RepositoryFactory repositoryFactory = buildRepositoryFactory(askWalletCode,
             bidWalletCode, walletRepository, "1", "1", "1", "1", "1", "1", "1", "1");
 
-        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory);
+        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory, tradeSender);
         priceTimePriority.processAsk(askWalletCode, new BigDecimal("0.5"), new BigDecimal("1"));
 
         BigDecimal bidBRL = balanceAfter(walletRepository, bidWalletCode, Asset.BRL);
@@ -170,7 +172,7 @@ public class PriceTimePriorityMatcherTest {
         RepositoryFactory repositoryFactory = buildRepositoryFactory(askWalletCode,
             bidWalletCode, walletRepository, "1", "1", "1", "1", "1", "1", "1", "1");
 
-        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory);
+        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory, tradeSender);
         priceTimePriority.processAsk(askWalletCode, new BigDecimal("1"), new BigDecimal("0.5"));
 
         BigDecimal bidBRL = balanceAfter(walletRepository, bidWalletCode, Asset.BRL);
@@ -189,7 +191,7 @@ public class PriceTimePriorityMatcherTest {
         RepositoryFactory repositoryFactory = buildRepositoryFactory(askWalletCode,
             bidWalletCode, walletRepository, "1", "1", "1", "1", "1", "1", "1", "1");
 
-        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory);
+        MatcherEngine priceTimePriority = new PriceTimePriorityMatcher(repositoryFactory, tradeSender);
         priceTimePriority.processAsk(askWalletCode, new BigDecimal("1"), new BigDecimal("2"));
 
         BigDecimal bidBRL = balanceAfter(walletRepository, bidWalletCode, Asset.BRL);

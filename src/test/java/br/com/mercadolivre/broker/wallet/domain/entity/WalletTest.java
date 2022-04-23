@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
+import br.com.mercadolivre.broker.common.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.exception.SendTransferException;
 import br.com.mercadolivre.broker.wallet.domain.exception.WithdrawException;
 

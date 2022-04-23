@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
+import br.com.mercadolivre.broker.common.enums.Asset;
 
 public interface PartitionDAO extends JpaRepository<PartitionEntity, Long> {
     PartitionEntity getByWalletIdAndAsset(Long id, Asset asset);

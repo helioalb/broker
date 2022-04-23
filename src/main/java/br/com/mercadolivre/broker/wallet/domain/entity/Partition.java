@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
+import br.com.mercadolivre.broker.common.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
 import br.com.mercadolivre.broker.wallet.domain.exception.TransactionException;
 

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
+import br.com.mercadolivre.broker.common.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
 
 public class PartitionTest {

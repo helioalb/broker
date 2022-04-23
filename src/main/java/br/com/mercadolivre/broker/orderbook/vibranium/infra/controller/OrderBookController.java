@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.dto.AskInput;
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.dto.BidInput;
-import br.com.mercadolivre.broker.orderbook.vibranium.infra.message.OrderSender;
+import br.com.mercadolivre.broker.orderbook.vibranium.infra.service.OrderSender;
 
 @RestController
 @RequestMapping("orderbook/vibranium")

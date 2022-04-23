@@ -1,6 +1,5 @@
-package br.com.mercadolivre.broker.orderbook.vibranium.config;
+package br.com.mercadolivre.broker.common.config;
 
-import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMQConfig {
+public class RabbitMQCommonConfig {
 
     @Value("${spring.rabbitmq.username}")
     private String username;
@@ -21,37 +20,6 @@ public class RabbitMQConfig {
 
     @Value("${spring.rabbitmq.host}")
     private String host;
-
-    @Value("${spring.rabbitmq.order.queue}")
-    private String orderQueue;
-
-    @Value("${spring.rabbitmq.order.exchange}")
-    private String orderExchange;
-
-    @Value("${spring.rabbitmq.order.routingkey}")
-    private String orderRoutingKey;
-
-    @Bean
-    Queue orderQueue() {
-        return new Queue(orderQueue, true);
-    }
-
-    @Bean
-    Exchange orderExchange() {
-        return ExchangeBuilder
-                .directExchange(orderExchange)
-                .durable(true)
-                .build();
-    }
-
-    @Bean
-    Binding binding() {
-        return BindingBuilder
-                .bind(orderQueue())
-                .to(orderExchange())
-                .with(orderRoutingKey)
-                .noargs();
-    }
 
     @Bean
     public ConnectionFactory connectionFactory() {

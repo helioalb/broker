@@ -26,9 +26,32 @@ public class AskRepositoryPostgres implements AskRepository {
     }
 
     @Override
-    public void save(Ask a) {
-        dao.save(new AskEntity(a.getId(), a.getWalletCode(), a.getQuantity(),
-                               a.getPrice(), a.getTradedWith(), a.getTradedQuantity()));
+    public Ask save(Ask ask) {
+        AskEntity ae = new AskEntity(ask.getWalletCode(),
+                                     ask.getQuantity(),
+                                     ask.getPrice());
+        ae = dao.save(ae);
+        return new Ask(ae.getId(),
+                       ae.getWalletCode(),
+                       ae.getQuantity(),
+                       ae.getPrice());
+    }
+
+    @Override
+    public void delete(Ask ask) {
+        if (ask.getId() != null)
+            dao.deleteById(ask.getId());
+    }
+
+    @Override
+    public Optional<Ask> findById(Long id) {
+        Optional<AskEntity> ae = dao.findById(id);
+        if (ae.isEmpty()) return Optional.empty();
+        Ask ask = new Ask(ae.get().getId(),
+                          ae.get().getWalletCode(),
+                          ae.get().getQuantity(),
+                          ae.get().getPrice());
+        return Optional.of(ask);
     }
 
 }

@@ -17,3 +17,7 @@ spring:
       exchange: order.exchange
       queue: order.queue
       routingkey: order.routingkey
+    trade:
+      exchange: trade.exchange
+      queue: trade.queue
+      routingkey: trade.routingkey

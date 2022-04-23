@@ -26,9 +26,31 @@ public class BidRepositoryPostgres implements BidRepository {
     }
 
     @Override
-    public void save(Bid b) {
-        dao.save(new BidEntity(b.getId(), b.getWalletCode(), b.getQuantity(),
-                               b.getPrice(), b.getTradedWith(), b.getTradedQuantity()));
+    public Bid save(Bid bid) {
+        BidEntity be = new BidEntity(bid.getWalletCode(),
+                                     bid.getQuantity(),
+                                     bid.getPrice());
+        be = dao.save(be);
+        return new Bid(be.getId(),
+                       be.getWalletCode(),
+                       be.getQuantity(),
+                       be.getPrice());
     }
 
+    @Override
+    public void delete(Bid bid) {
+        if (bid.getId() != null)
+            dao.deleteById(bid.getId());
+    }
+
+    @Override
+    public Optional<Bid> findById(Long id) {
+        Optional<BidEntity> be = dao.findById(id);
+        if (be.isEmpty()) return Optional.empty();
+        Bid bid = new Bid(be.get().getId(),
+                            be.get().getWalletCode(),
+                            be.get().getQuantity(),
+                            be.get().getPrice());
+        return Optional.of(bid);
+    }
 }

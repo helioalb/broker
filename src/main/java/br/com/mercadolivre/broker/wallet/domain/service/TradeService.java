@@ -2,8 +2,8 @@ package br.com.mercadolivre.broker.wallet.domain.service;
 
 import java.math.BigDecimal;
 
+import br.com.mercadolivre.broker.common.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.exception.TradeException;
 
 public class TradeService {

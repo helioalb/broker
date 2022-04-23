@@ -1,23 +1,26 @@
-package br.com.mercadolivre.broker.orderbook.vibranium.infra.message;
+package br.com.mercadolivre.broker.orderbook.vibranium.infra.service;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.service.MatcherEngine;
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.dto.BidInput;
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.dto.OrderInput;
 import br.com.mercadolivre.broker.orderbook.vibranium.usecase.CreateAsk;
-import br.com.mercadolivre.broker.orderbook.vibranium.usecase.createbid.CreateBid;
+import br.com.mercadolivre.broker.orderbook.vibranium.usecase.CreateBid;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
 public class OrderReceiver implements RabbitListenerConfigurer {
-    @Autowired
+
     private MatcherEngine matcherEngine;
+
+    public OrderReceiver(MatcherEngine matcherEngine) {
+        this.matcherEngine = matcherEngine;
+    }
 
     @Override
     public void configureRabbitListeners(RabbitListenerEndpointRegistrar registrar) {
@@ -38,7 +41,7 @@ public class OrderReceiver implements RabbitListenerConfigurer {
                                                     order.getPrice());
             }
         } catch (Exception e) {
-            log.error("[ORDER][ERROR]: %s" +  e.getMessage());
+            log.error("[ORDER][ERROR]: " +  e.getMessage());
         }
     }
 }

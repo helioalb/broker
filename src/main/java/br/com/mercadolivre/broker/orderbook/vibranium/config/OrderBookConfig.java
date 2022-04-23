@@ -8,9 +8,11 @@ import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.AskRepos
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.BidRepository;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.service.MatcherEngine;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.service.PriceTimePriorityMatcher;
+import br.com.mercadolivre.broker.orderbook.vibranium.domain.service.TradeSender;
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.factory.RepositoryFactoryPostgres;
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.AskRepositoryPostgres;
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.BidRepositoryPostgres;
+import br.com.mercadolivre.broker.orderbook.vibranium.infra.service.TradeSenderRabbitmq;
 
 @Configuration
 public class OrderBookConfig {
@@ -30,8 +32,13 @@ public class OrderBookConfig {
     }
 
     @Bean
+    public TradeSender tradeSender() {
+        return new TradeSenderRabbitmq();
+    }
+
+    @Bean
     public MatcherEngine match() {
-        return new PriceTimePriorityMatcher(repositoryFactory());
+        return new PriceTimePriorityMatcher(repositoryFactory(), tradeSender());
     }
 
 }

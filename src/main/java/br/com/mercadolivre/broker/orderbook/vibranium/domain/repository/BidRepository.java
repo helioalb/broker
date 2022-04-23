@@ -7,6 +7,7 @@ import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Bid;
 public interface BidRepository {
 
     public Optional<Bid> top();
-    public void save(Bid bid);
-
+    public Bid save(Bid bid);
+    public void delete(Bid bid);
+    public Optional<Bid> findById(Long id);
 }

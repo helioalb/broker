@@ -2,7 +2,7 @@ package br.com.mercadolivre.broker.wallet.usecase.deposit;
 
 import java.math.BigDecimal;
 
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
+import br.com.mercadolivre.broker.common.enums.Asset;
 import lombok.Getter;
 @Getter
 public class DepositInput {
