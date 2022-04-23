@@ -42,26 +42,6 @@ public class IntentTest {
     }
 
     @Test
-    void trandeWithItself() {
-        Bid bid = new Bid("abc", new BigDecimal("10"), new BigDecimal("1"));
-        BigDecimal tradedQuantity = new BigDecimal("1");
-        Exception e = assertThrows(IllegalArgumentException.class,
-            () -> bid.tradedWith(bid, tradedQuantity));
-        assertEquals("trade with itself is not permitted", e.getMessage());
-    }
-
-    @Test
-    void trandWithDifferentIntent() {
-        Bid bid = new Bid("abc", new BigDecimal("1"), new BigDecimal("1"));
-        Ask ask = new Ask("def", new BigDecimal("2"), new BigDecimal("1"));
-
-        bid.tradedWith(ask, new BigDecimal("1"));
-
-        assertEquals("def", bid.getTradedWith());
-        assertEquals(new BigDecimal("1"), bid.getTradedQuantity());
-    }
-
-    @Test
     void decreaseQuantityBasedOn() {
         Bid bid = new Bid("abc", new BigDecimal("2"), new BigDecimal("1"));
         Ask ask = new Ask("def", new BigDecimal("1"), new BigDecimal("1"));

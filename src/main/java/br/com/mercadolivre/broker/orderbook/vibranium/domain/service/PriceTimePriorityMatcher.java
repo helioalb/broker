@@ -77,9 +77,7 @@ public class PriceTimePriorityMatcher extends MatcherEngine {
             .rightWalletCode(ask.getWalletCode()).rightAssetOut("VIB").rightAmountOut(vib)
             .execute();
 
-            bid.tradedWith(ask, vib);
-            ask.tradedWith(bid, vib);
-            bidRepository.save(bid);
-            askRepository.save(ask);
+            bidRepository.delete(bid);
+            askRepository.delete(ask);
     }
 }
