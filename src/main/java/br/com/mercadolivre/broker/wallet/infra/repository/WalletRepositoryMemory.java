@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import br.com.mercadolivre.broker.common.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.entity.Partition;
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.exception.PendingTransactionsException;
 import br.com.mercadolivre.broker.wallet.domain.exception.TradeException;
 import br.com.mercadolivre.broker.wallet.domain.exception.WalletNotCreatedException;

@@ -10,12 +10,12 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import br.com.mercadolivre.broker.common.enums.Asset;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Ask;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Bid;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.factory.RepositoryFactory;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.AskRepository;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.repository.BidRepository;
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 import br.com.mercadolivre.broker.wallet.infra.repository.WalletRepositoryMemory;
 

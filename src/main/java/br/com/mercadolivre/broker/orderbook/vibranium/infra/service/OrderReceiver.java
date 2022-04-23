@@ -3,7 +3,6 @@ package br.com.mercadolivre.broker.orderbook.vibranium.infra.service;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.service.MatcherEngine;
@@ -16,8 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class OrderReceiver implements RabbitListenerConfigurer {
-    @Autowired
+
     private MatcherEngine matcherEngine;
+
+    public OrderReceiver(MatcherEngine matcherEngine) {
+        this.matcherEngine = matcherEngine;
+    }
 
     @Override
     public void configureRabbitListeners(RabbitListenerEndpointRegistrar registrar) {

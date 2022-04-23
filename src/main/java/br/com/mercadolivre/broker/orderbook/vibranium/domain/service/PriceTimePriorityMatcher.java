@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 
 import javax.transaction.Transactional;
 
+import br.com.mercadolivre.broker.common.enums.Asset;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Ask;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Bid;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Trade;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.factory.RepositoryFactory;
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 
 public class PriceTimePriorityMatcher extends MatcherEngine {
 

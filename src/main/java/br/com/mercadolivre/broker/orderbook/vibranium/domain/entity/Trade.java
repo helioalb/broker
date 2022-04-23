@@ -2,7 +2,7 @@ package br.com.mercadolivre.broker.orderbook.vibranium.domain.entity;
 
 import java.math.BigDecimal;
 
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
+import br.com.mercadolivre.broker.common.enums.Asset;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,5 +13,5 @@ public class Trade {
     private Intent bid;
     private Intent ask;
     private BigDecimal quantity;
-    private BigDecimal price;
+    private BigDecimal amount;
 }

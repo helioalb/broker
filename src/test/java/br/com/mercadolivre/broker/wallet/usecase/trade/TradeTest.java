@@ -15,9 +15,9 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import br.com.mercadolivre.broker.common.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.entity.Partition;
 import br.com.mercadolivre.broker.wallet.domain.entity.Wallet;
-import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 import br.com.mercadolivre.broker.wallet.domain.service.TradeService;
 
