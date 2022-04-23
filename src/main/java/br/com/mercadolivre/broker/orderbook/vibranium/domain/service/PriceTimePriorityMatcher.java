@@ -6,18 +6,21 @@ import javax.transaction.Transactional;
 
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Ask;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Bid;
+import br.com.mercadolivre.broker.orderbook.vibranium.domain.entity.Trade;
 import br.com.mercadolivre.broker.orderbook.vibranium.domain.factory.RepositoryFactory;
+import br.com.mercadolivre.broker.wallet.domain.enums.Asset;
 
 public class PriceTimePriorityMatcher extends MatcherEngine {
 
-    public PriceTimePriorityMatcher(RepositoryFactory repositoryFactory) {
-        super(repositoryFactory);
+    public PriceTimePriorityMatcher(RepositoryFactory repositoryFactory,
+                                    TradeSender tradeSender) {
+        super(repositoryFactory, tradeSender);
     }
 
     @Override
     @Transactional
     public void processBid(String walletCode, BigDecimal quantity, BigDecimal price) {
-        if (!trade.isAvailableFor(walletCode)) {
+        if (!walletTrade.isAvailableFor(walletCode)) {
             throw new IllegalStateException("wallet " + walletCode + "not exists");
         }
 
@@ -46,7 +49,7 @@ public class PriceTimePriorityMatcher extends MatcherEngine {
     @Override
     @Transactional
     public void processAsk(String walletCode, BigDecimal quantity, BigDecimal price) {
-        if (!trade.isAvailableFor(walletCode)) {
+        if (!walletTrade.isAvailableFor(walletCode)) {
             throw new IllegalStateException("wallet " + walletCode + "not exists");
         }
 
@@ -72,12 +75,18 @@ public class PriceTimePriorityMatcher extends MatcherEngine {
         }, () -> askRepository.save(ask));
     }
 
-    private void trade(Bid bid, Ask ask, BigDecimal brl, BigDecimal vib) {
-        trade.leftWalletCode(bid.getWalletCode()).leftAssetOut("BRL").leftAmountOut(brl)
-            .rightWalletCode(ask.getWalletCode()).rightAssetOut("VIB").rightAmountOut(vib)
+    private void trade(Bid bid, Ask ask, BigDecimal amount, BigDecimal quantity) {
+        walletTrade.leftWalletCode(bid.getWalletCode())
+            .leftAssetOut("BRL")
+            .leftAmountOut(amount)
+            .rightWalletCode(ask.getWalletCode())
+            .rightAssetOut("VIB")
+            .rightAmountOut(quantity)
             .execute();
 
+            Trade trade = new Trade(Asset.VIB, bid, ask, quantity, amount);
             bidRepository.delete(bid);
             askRepository.delete(ask);
+            tradeSender.send(trade);
     }
 }

@@ -1,4 +1,4 @@
-package br.com.mercadolivre.broker.orderbook.vibranium.infra.message;
+package br.com.mercadolivre.broker.orderbook.vibranium.infra.service;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
@@ -10,7 +10,7 @@ import br.com.mercadolivre.broker.orderbook.vibranium.domain.service.MatcherEngi
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.dto.BidInput;
 import br.com.mercadolivre.broker.orderbook.vibranium.infra.dto.OrderInput;
 import br.com.mercadolivre.broker.orderbook.vibranium.usecase.CreateAsk;
-import br.com.mercadolivre.broker.orderbook.vibranium.usecase.createbid.CreateBid;
+import br.com.mercadolivre.broker.orderbook.vibranium.usecase.CreateBid;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -38,7 +38,7 @@ public class OrderReceiver implements RabbitListenerConfigurer {
                                                     order.getPrice());
             }
         } catch (Exception e) {
-            log.error("[ORDER][ERROR]: %s" +  e.getMessage());
+            log.error("[ORDER][ERROR]: " +  e.getMessage());
         }
     }
 }

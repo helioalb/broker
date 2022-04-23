@@ -39,7 +39,8 @@ public class AskRepositoryPostgres implements AskRepository {
 
     @Override
     public void delete(Ask ask) {
-        dao.deleteById(ask.getId());
+        if (ask.getId() != null)
+            dao.deleteById(ask.getId());
     }
 
     @Override

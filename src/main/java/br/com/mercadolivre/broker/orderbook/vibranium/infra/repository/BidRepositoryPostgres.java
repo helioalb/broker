@@ -39,7 +39,8 @@ public class BidRepositoryPostgres implements BidRepository {
 
     @Override
     public void delete(Bid bid) {
-        dao.deleteById(bid.getId());
+        if (bid.getId() != null)
+            dao.deleteById(bid.getId());
     }
 
     @Override

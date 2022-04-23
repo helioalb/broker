@@ -1,4 +1,4 @@
-package br.com.mercadolivre.broker.orderbook.vibranium.infra.message;
+package br.com.mercadolivre.broker.orderbook.vibranium.infra.service;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
