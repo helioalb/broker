@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  app:
+    image: helioalb/broker:latest
+    container_name: app
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: always
+    command: --spring.profiles.active=prod
+  postgres:
+    image: postgres:14.2
+    container_name: postgres
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "broker" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    environment:
+      POSTGRES_USER: broker
+      POSTGRES_PASSWORD: broker
+      POSTGRES_DB: broker
+    ports:
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:management
+    container_name: rabbitmq
+    restart: always
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/mnesia/
+    ports:
+      - 5672:5672
+      - 15672:15672
+volumes:
+    db_data:
+    rabbitmq_data:
