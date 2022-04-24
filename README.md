@@ -5,6 +5,7 @@
 - [How to run?](#how-to-run)
 - [Endpoints](#endpoints)
 - [Development requirements](#development-requirements)
+- [Load tests](#load-tests)
 - [Simulations](#simulations)
 
 ## Architecture
@@ -95,6 +96,12 @@ The endpoints also can be accessed in: http://localhost:8080/swagger-ui/index.ht
 - Postgres > 13
 - MongoDb > 5
 - RabbitMq > 3.9
+- jMeter
+
+## Load Tests
+
+![jmeter](https://user-images.githubusercontent.com/349951/164985274-a0bbe791-61cc-40d5-bec0-0ba7b7f8a5bf.png)
+
 
 ## Simulations
 
