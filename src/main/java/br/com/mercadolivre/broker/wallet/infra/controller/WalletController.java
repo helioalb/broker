@@ -1,15 +1,22 @@
 package br.com.mercadolivre.broker.wallet.infra.controller;
 
+import java.math.BigDecimal;
+import java.util.EnumMap;
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.mercadolivre.broker.common.enums.Asset;
+import br.com.mercadolivre.broker.wallet.domain.entity.Partition;
 import br.com.mercadolivre.broker.wallet.domain.repository.WalletRepository;
 import br.com.mercadolivre.broker.wallet.infra.controller.dto.CreateOutput;
 import br.com.mercadolivre.broker.wallet.infra.controller.dto.DepositInputDto;
@@ -55,5 +62,19 @@ public class WalletController {
         new Withdraw(repository).execute(input);
         log.info("[WITHDRAW][REALIZED] " + in);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+    @GetMapping(path = "{code}")
+    public ResponseEntity<Map<Asset, BigDecimal>> balance(@PathVariable String code) {
+
+        Map<Asset, BigDecimal> balance = new EnumMap<>(Asset.class);
+
+        repository.findByCode(code).ifPresentOrElse(wallet -> {
+            for(Partition partition : wallet.getPartitions()) {
+                balance.put(partition.getAsset(), partition.getBalance());
+            }
+        }, () -> { throw new IllegalArgumentException("wallet doesn't exists"); });
+
+        return ResponseEntity.status(HttpStatus.OK).body(balance);
     }
 }

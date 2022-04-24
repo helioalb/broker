@@ -1,6 +1,7 @@
 package br.com.mercadolivre.broker.trade.domain.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import javax.persistence.Id;
 
@@ -18,6 +19,7 @@ public class Trade {
     private BigDecimal quantity;
     private String sellerWalletCode;
     private String buyerWalletCode;
+    private LocalDateTime createdAt;
 
     public Trade(Asset assetTraded,
                  Asset assetUsedToPay,
@@ -31,6 +33,7 @@ public class Trade {
         setSellerWalletCode(sellerWalletCode);
         setQuantity(quantity);
         setAmount(amount);
+        this.createdAt = LocalDateTime.now();
     }
 
     private void setAmount(BigDecimal amount) {
