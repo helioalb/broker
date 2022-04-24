@@ -10,6 +10,9 @@
 
 ## Architecture
 
+![orderbook drawio](https://user-images.githubusercontent.com/349951/165001626-11fa1ddf-47ca-4a18-af03-2c2d8d1ceeb6.png)
+
+
 ### System components
 The system is partitioned in 3 main components: 
  - [Wallet](#wallet)
@@ -18,7 +21,7 @@ The system is partitioned in 3 main components:
 
 #### Wallet
 
-The responsibility of this component is manager wallets. In this, is possible to do deposits and withdraws. Currently, the wallet is enabled to store BRL(Brazilian Real) and VIB(Vibranium), but the structure is ready to store any kind of asset.
+The responsibility of this component is to manager the wallets. In this, is possible to do deposits and withdraws. Currently, the wallet is enabled to store BRL(Brazilian Real) and VIB(Vibranium), but the structure is ready to store any kind of asset.
 Besides that, there is a feature to make trades. This feature will be used in the next component, the [OrderBook](#orderbook).
 
 ##### About the database.
@@ -68,7 +71,7 @@ docker build -t helioalb/broker:latest .
 docker-compose up -d
 ```
 
-ou, se quiser acompanhar os logs:
+or, if you want see logs:
 
 ```shell
 docker-compose up
@@ -105,18 +108,18 @@ The endpoints also can be accessed in: http://localhost:8080/swagger-ui/index.ht
 
 ## Simulations
 
-#### Wallets with balance
+### Wallets with balance
 
 
-##### Create first wallet:
+#### Create first wallet:
 
-###### Request
+##### Request
 ```shell
 curl --request POST \
   --url http://localhost:8080/wallets
 ```
 
-###### Response
+##### Response
 
 ```json
 {"id":"fd308578-b94f-4231-8ae0-91cf8fc60227"}
@@ -124,9 +127,9 @@ curl --request POST \
 
 
 
-##### Deposit BRL in fd308578-b94f-4231-8ae0-91cf8fc60227
+#### Deposit BRL in fd308578-b94f-4231-8ae0-91cf8fc60227
 
-###### Request
+##### Request
 
 ```shell
 curl --request POST \
@@ -138,15 +141,15 @@ curl --request POST \
 }'
 ```
 
-###### Response
+##### Response
 
 ```json
 202
 ```
 
-##### Deposit VIB in fd308578-b94f-4231-8ae0-91cf8fc60227
+#### Deposit VIB in fd308578-b94f-4231-8ae0-91cf8fc60227
 
-###### Request
+##### Request
 
 ```shell
 curl --request POST \
@@ -158,31 +161,29 @@ curl --request POST \
 }'
 ```
 
-###### Response
+##### Response
 
 ```json
 202
 ```
 
-##### Create second wallet:
+#### Create second wallet:
 
-###### Request
+##### Request
 ```shell
 curl --request POST \
   --url http://localhost:8080/wallets
 ```
 
-###### Response
+##### Response
 
 ```json
 {"id":"5953bfc2-5c11-4847-b8fc-1f78513c701d"}
 ```
 
+#### Deposit BRL in 5953bfc2-5c11-4847-b8fc-1f78513c701d
 
-
-##### Deposit BRL in 5953bfc2-5c11-4847-b8fc-1f78513c701d
-
-###### Request
+##### Request
 
 ```shell
 curl --request POST \
@@ -194,15 +195,15 @@ curl --request POST \
 }'
 ```
 
-###### Response
+##### Response
 
 ```json
 202
 ```
 
-##### Deposit VIB in 5953bfc2-5c11-4847-b8fc-1f78513c701d
+#### Deposit VIB in 5953bfc2-5c11-4847-b8fc-1f78513c701d
 
-###### Request
+##### Request
 
 ```shell
 curl --request POST \
@@ -214,15 +215,15 @@ curl --request POST \
 }'
 ```
 
-###### Response
+##### Response
 
 ```json
 202
 ```
 
-##### Wallet fd308578-b94f-4231-8ae0-91cf8fc60227 wants buy 10 vibraniums by 0.9
+#### Wallet fd308578-b94f-4231-8ae0-91cf8fc60227 wants buy 10 vibraniums by 0.9
 
-###### Request
+##### Request
 
 ```shell
 curl --request POST \
@@ -235,22 +236,22 @@ curl --request POST \
 }'
 ```
 
-###### Response
+##### Response
 
 ```json
 202
 ```
 
-##### List bids
+#### List bids
 
-###### Request
+##### Request
 
 ```shell
 curl --request GET \
   --url http://localhost:8080/orderbook/vibranium/bids
 ```
 
-###### Response
+##### Response
 
 ```json
     {
@@ -261,9 +262,9 @@ curl --request GET \
     }
 ```
 
-##### Wallet 5953bfc2-5c11-4847-b8fc-1f78513c701d to sell 5 vibraniums by 0.8
+#### Wallet 5953bfc2-5c11-4847-b8fc-1f78513c701d to sell 5 vibraniums by 0.8
 
-###### Request
+##### Request
 
 ```shell
 curl --request POST \
@@ -276,22 +277,22 @@ curl --request POST \
 }'
 ```
 
-###### Response
+##### Response
 
 ```json
 202
 ```
 
-##### List bids
+#### List bids
 
-###### Request
+##### Request
 
 ```shell
 curl --request GET \
   --url http://localhost:8080/orderbook/vibranium/bids
 ```
 
-###### Response
+##### Response
 
 ```json
     {
@@ -302,16 +303,16 @@ curl --request GET \
     }
 ```
 
-##### Trade
+#### Trade
 
-###### Request
+##### Request
 
 ```shell
 curl --request GET \
   --url http://localhost:8080/trades
 ```
 
-###### Response
+##### Response
 
 ```json
 [
@@ -329,9 +330,9 @@ curl --request GET \
 ]
 ```
 
-##### Wallet 5953bfc2-5c11-4847-b8fc-1f78513c701d to sell 10 vibraniums by 0.8
+#### Wallet 5953bfc2-5c11-4847-b8fc-1f78513c701d to sell 10 vibraniums by 0.8
 
-###### Request
+##### Request
 
 ```shell
 curl --request POST \
@@ -344,37 +345,37 @@ curl --request POST \
 }'
 ```
 
-###### Response
+##### Response
 
 ```json
 202
 ```
 
-##### List bids
+#### List bids
 
-###### Request
+##### Request
 
 ```shell
 curl --request GET \
   --url http://localhost:8080/orderbook/vibranium/bids
 ```
 
-###### Response
+##### Response
 
 ```json
     empty
 ```
 
-##### Trade
+#### Trade
 
-###### Request
+##### Request
 
 ```shell
 curl --request GET \
   --url http://localhost:8080/trades
 ```
 
-###### Response
+##### Response
 
 ```json
 [
@@ -401,16 +402,16 @@ curl --request GET \
 ]
 ```
 
-##### List asks
+#### List asks
 
-###### Request
+##### Request
 
 ```shell
 curl --request GET \
   --url http://localhost:8080/orderbook/vibranium/asks
 ```
 
-###### Response
+##### Response
 
 ```json
     {
