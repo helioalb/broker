@@ -11,10 +11,10 @@ public class Withdraw {
     }
 
     public void execute(WithdrawInput input) {
-        repository.findByCode(input.getCode()).ifPresent(wallet -> {
+        repository.findByCode(input.getCode()).ifPresentOrElse(wallet -> {
             wallet.withdraw(input.getAsset(), input.getAmount());
             this.repository.persistPendingTransactions(wallet);
-        });
+        }, () -> { throw new IllegalArgumentException("wallet not found"); });
     }
 
 }

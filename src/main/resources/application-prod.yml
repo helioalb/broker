@@ -5,3 +5,8 @@ spring:
     password: broker
   rabbitmq:
     host: rabbitmq
+  data:
+    mongodb:
+      host: mongodb
+      port: 27017
+      database: broker
