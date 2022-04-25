@@ -1,5 +1,6 @@
 package br.com.mercadolivre.broker.wallet.infra.repository.dao;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -9,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,4 +36,8 @@ public class WalletEntity {
 
     @OneToMany(mappedBy = "wallet")
     private Set<PartitionEntity> partitions;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }

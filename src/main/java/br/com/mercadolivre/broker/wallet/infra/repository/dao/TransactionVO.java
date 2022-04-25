@@ -1,6 +1,7 @@
 package br.com.mercadolivre.broker.wallet.infra.repository.dao;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import br.com.mercadolivre.broker.wallet.domain.enums.TransactionType;
 import lombok.AllArgsConstructor;
@@ -43,4 +46,8 @@ public class TransactionVO {
 
     @ManyToOne
     private PartitionEntity partition;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }

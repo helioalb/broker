@@ -1,6 +1,7 @@
 package br.com.mercadolivre.broker.orderbook.vibranium.infra.repository.dao;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,4 +41,8 @@ public class BidEntity {
 
     @Column(name = "price", nullable = false, updatable = false)
     private BigDecimal price;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }
